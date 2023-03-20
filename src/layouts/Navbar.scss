@@ -1,0 +1,15 @@
+@use '../common/style/variables' as *;
+@use '../common/style/functions' as *;
+
+.navbar {
+  background-color: var(--clr-black);
+  padding: rem(20) rem(40);
+  color: white;
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+    font-size: var(--font-700);
+  }
+}

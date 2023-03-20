@@ -1,0 +1,46 @@
+@use '../../common/style/index' as *;
+
+.input {
+  border-radius: 5px;
+  border: 1px solid var(--clr-grey-1);
+  outline: none;
+  padding: rem(8) rem(10);
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  &__error-message {
+    color: var(--clr-red);
+  }
+
+  &--error {
+    border: 1px solid var(--clr-red);
+  }
+
+  &__label {
+    margin-left: rem(10);
+    margin-bottom: rem(5);
+    transition: all 0.3s;
+    font-size: var(--font-300);
+  }
+
+  & ~ &__label {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(30px);
+  }
+
+  &:focus::placeholder {
+    color: transparent;
+  }
+  &:focus ~ &__label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &:not(:placeholder-shown) ~ &__label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

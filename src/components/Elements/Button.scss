@@ -1,0 +1,23 @@
+@use '../common/style/functions' as *;
+@use '../common/style/variables' as *;
+.btn {
+  background-color: black;
+  border: none;
+  color: white;
+
+  &--sm {
+    padding: rem(5) rem(10);
+  }
+
+  &--md {
+    padding: rem(7) rem(15);
+  }
+
+  &--lg {
+    padding: rem(10) rem(22);
+  }
+
+  &:active {
+    transform: translateY(-5px);
+  }
+}
