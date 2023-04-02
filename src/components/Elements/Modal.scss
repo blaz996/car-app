@@ -1,44 +1,23 @@
 @use '../../common/style/index' as *;
-
 .modal {
-  background-color: var(--clr-grey-5);
-  width: min(rem(300), 60vw);
+  width: min(rem(400), 80vw);
+  background-color: white;
 
   &__header {
+    background-color: var(--clr-black);
+    color: white;
+    padding: rem(15);
+  }
+
+  &__content {
+    padding: rem(30) rem(15);
+  }
+
+  &__footer {
+    padding-inline: rem(10);
+    padding-bottom: rem(10);
     display: flex;
-
-    justify-content: space-between;
-    padding: rem(20) rem(30);
-  }
-
-  &__title {
-    font-size: var(--font-600);
-    text-transform: capitalize;
-  }
-
-  &__toggle {
-    background-color: transparent;
-    border: none;
-    color: black;
-    cursor: pointer;
-
-    font-size: var(--font-800);
-  }
-
-  &__body {
-    max-height: 0px;
-    padding-inline: rem(30);
-    overflow: hidden;
-    transition: max-height 0.4s;
-
-    &--shown {
-      max-height: 300px;
-    }
-
-    .radio {
-      &__label {
-        margin-block: rem(15);
-      }
-    }
+    gap: rem(15);
+    justify-content: end;
   }
 }

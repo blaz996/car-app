@@ -1,23 +1,50 @@
-@use '../common/style/functions' as *;
-@use '../common/style/variables' as *;
+@use '../../common/style/index' as *;
+
 .btn {
-  background-color: black;
+  border-radius: 3px;
   border: none;
-  color: white;
+  transition: all 0.3s;
+  cursor: pointer;
+
+  &--primary {
+    background-color: var(--clr-black);
+    color: white;
+
+    &:hover {
+      background-color: rgb(83, 83, 83);
+    }
+  }
+
+  &--secondary {
+    background-color: white;
+    border: 1px solid var(--clr-black);
+    &:hover {
+      background-color: var(--clr-grey-4);
+    }
+  }
+
+  &--red {
+    background-color: var(--clr-red);
+    color: white;
+    &:hover {
+      background-color: var(--clr-red-light);
+    }
+  }
 
   &--sm {
     padding: rem(5) rem(10);
   }
 
   &--md {
-    padding: rem(7) rem(15);
+    padding: rem(10) rem(18);
   }
 
   &--lg {
-    padding: rem(10) rem(22);
+    font-size: var(--font-400);
+    padding: rem(12) rem(22);
   }
 
   &:active {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
   }
 }

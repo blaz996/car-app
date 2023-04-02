@@ -1,26 +1,34 @@
 import React from 'react';
-import { useDisclosure } from '../../common/hooks/useDisclosure';
+
+import { Overlay } from './Overlay';
 
 import './Modal.scss';
 
 type ModalProps = {
+  shown: boolean;
   modalTitle: string;
   children: React.ReactNode;
 };
 
-export const Modal = ({ modalTitle, children }: ModalProps) => {
-  const { isOpen: isModalOpen, toggle: toggleModal } = useDisclosure();
+export const Modal = ({ children, modalTitle, shown }: ModalProps) => {
   return (
-    <div className='modal'>
-      <div className='modal__header'>
-        <p className='modal__title'>{modalTitle}</p>
-        <button onClick={toggleModal} className='modal__toggle'>
-          {isModalOpen ? '-' : '+'}
-        </button>
-      </div>
-      <div className={`modal__body ${isModalOpen ? 'modal__body--shown' : ''}`}>
+    <Overlay shown={shown}>
+      <div className='modal'>
+        <div className='modal__header'>
+          <h3 className='modal__title'>{modalTitle}</h3>
+        </div>
         {children}
       </div>
-    </div>
+    </Overlay>
   );
 };
+
+const Body = ({ children }: { children: React.ReactNode }) => {
+  return <div className='modal__content'>{children}</div>;
+};
+const Footer = ({ children }: { children: React.ReactNode }) => {
+  return <div className='modal__footer'>{children}</div>;
+};
+
+Modal.Body = Body;
+Modal.Footer = Footer;

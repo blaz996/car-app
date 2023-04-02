@@ -1,0 +1,41 @@
+@use '../../common/style/index' as *;
+
+.accordion {
+  background-color: var(--clr-grey-5);
+  border-radius: 3px;
+  box-shadow: var(--shadow-light);
+  max-width: rem(300);
+
+  &__header {
+    display: flex;
+
+    justify-content: space-between;
+    padding: rem(20) rem(30);
+  }
+
+  &__title {
+    font-size: var(--font-500);
+    text-transform: capitalize;
+  }
+
+  &__toggle {
+    background-color: transparent;
+    border: none;
+    color: black;
+    cursor: pointer;
+
+    font-size: var(--font-800);
+  }
+
+  &__body {
+    width: 100%;
+    overflow-y: auto;
+    max-height: 0px;
+
+    transition: max-height 0.4s;
+
+    &--shown {
+      max-height: rem(300);
+    }
+  }
+}

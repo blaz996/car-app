@@ -1,0 +1,19 @@
+@use '../../common/style/index' as *;
+
+.model-filters {
+  display: flex;
+  flex-direction: column;
+  gap: rem(30);
+
+  @include breakpoint-down(smallish) {
+    display: none;
+  }
+
+  &__title {
+    align-self: center;
+    font-size: var(--font-600);
+    letter-spacing: 1.2px;
+    font-weight: 400;
+  }
+  align-self: center;
+}

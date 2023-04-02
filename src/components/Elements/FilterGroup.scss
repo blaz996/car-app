@@ -1,0 +1,11 @@
+@use '../../common/style/index' as *;
+
+.filter__group {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: rem(15);
+  padding-inline: rem(10);
+  overflow: hidden;
+  padding-bottom: rem(20);
+}

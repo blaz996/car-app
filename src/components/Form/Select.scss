@@ -1,0 +1,15 @@
+@use '../../common/style/index' as *;
+
+.select {
+  padding: rem(8);
+  border: 1px solid var(--clr-grey-1);
+  cursor: pointer;
+
+  outline: none;
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: rem(7);
+    max-width: rem(250);
+  }
+}

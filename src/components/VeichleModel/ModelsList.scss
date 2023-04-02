@@ -1,0 +1,107 @@
+@use '../../common/style/index' as *;
+.models-list {
+  position: relative;
+  &__container {
+    padding-block: rem(15);
+
+    width: 100%;
+    display: grid;
+    gap: rem(80);
+    grid-template-columns: rem(250) 1fr;
+
+    @include breakpoint-down(medium) {
+      grid-template-columns: rem(200) 1fr;
+    }
+    @include breakpoint-down(smallish) {
+      grid-template-columns: 1fr;
+      padding-inline: rem(20);
+    }
+  }
+
+  .list {
+    padding-block: rem(40);
+    width: 100%;
+    margin-top: rem(30);
+    display: grid;
+    justify-content: center;
+
+    gap: rem(40);
+    grid-template-columns: repeat(auto-fit, minmax(rem(170), rem(220)));
+    grid-template-rows: rem(250);
+
+    @include breakpoint-down(small) {
+      justify-items: center;
+    }
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &__title {
+      font-size: var(--font-800);
+      letter-spacing: 1.25px;
+      font-weight: 500;
+    }
+
+    &__filter {
+      cursor: pointer;
+      margin-left: auto;
+      border-radius: 4px;
+      border: 1px solid var(--clr-grey-1);
+
+      align-items: center;
+      justify-content: space-between;
+      padding: rem(10);
+      gap: rem(20);
+      background-color: transparent;
+      transition: all 0.3s;
+      display: none;
+
+      @include breakpoint-down(smallish) {
+        display: flex;
+      }
+
+      &:hover {
+        background-color: var(--clr-black);
+        color: white;
+      }
+
+      span {
+        font-size: var(--font-300);
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      svg {
+        display: block;
+        width: rem(20);
+      }
+    }
+
+    &--empty {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%);
+      color: var(--clr-grey-1);
+
+      font-size: var(--font-700);
+      letter-spacing: 1.25px;
+    }
+
+    @include breakpoint-down(medium) {
+      grid-template-columns: repeat(auto-fit, minmax(rem(170), rem(200)));
+    }
+  }
+
+  &__error-msg {
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    font-size: var(--font-l);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
+  }
+}

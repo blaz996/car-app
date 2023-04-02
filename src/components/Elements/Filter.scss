@@ -1,0 +1,26 @@
+@use '../../common/style/index' as *;
+
+.filter {
+  display: none;
+  &__container {
+  }
+  &__label {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    font-size: var(--font-300);
+    padding: rem(8) rem(12);
+    border: 1px solid var(--clr-grey-1);
+    border-radius: 7px;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: var(--clr-black);
+      color: white;
+    }
+  }
+  &:checked + &__label {
+    background-color: var(--clr-black);
+    color: white;
+  }
+}

@@ -1,0 +1,81 @@
+@use '../../common/style/index' as *;
+.model-preview {
+  position: relative;
+  margin-top: rem(20);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  box-shadow: var(--shadow-light);
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-dark);
+  }
+
+  &__btn {
+    width: rem(30);
+    cursor: pointer;
+    height: rem(30);
+    padding: rem(5);
+    position: absolute;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: var(--font-500);
+    transition: all 0.3s;
+  }
+
+  &__remove {
+    background-color: var(--clr-red);
+    right: 0;
+    &:hover {
+      background-color: var(--clr-red-light);
+    }
+  }
+
+  &__edit {
+    background-color: var(--clr-green);
+    left: 0;
+
+    &:hover {
+      background-color: var(--clr-green-light);
+    }
+  }
+
+  &__head {
+    width: rem(250);
+    height: rem(200);
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid var(--clr-grey-4);
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+
+    object-position: center;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+  }
+
+  &__body {
+    padding-block: rem(20);
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    gap: rem(15);
+  }
+
+  &__name {
+    font-size: var(--font-500);
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

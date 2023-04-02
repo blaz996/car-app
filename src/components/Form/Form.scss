@@ -1,0 +1,7 @@
+@use '../../common//style/index' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: rem(15);
+}

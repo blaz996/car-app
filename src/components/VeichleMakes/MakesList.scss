@@ -1,0 +1,41 @@
+@use '../../common/style/index' as *;
+.makes-list {
+  &__container {
+    padding-block: rem(40);
+    width: 100%;
+    display: grid;
+    gap: rem(80);
+    grid-template-columns: rem(250) 1fr;
+
+    @include breakpoint-down(medium) {
+      grid-template-columns: rem(200) 1fr;
+    }
+    @include breakpoint-down(smallish) {
+      grid-template-columns: 1fr;
+      padding-inline: rem(20);
+    }
+  }
+
+  .list {
+    padding-block: rem(40);
+    width: 100%;
+    margin-top: rem(30);
+    display: grid;
+    justify-content: center;
+    gap: rem(40);
+    grid-template-columns: repeat(auto-fit, minmax(rem(170), rem(220)));
+    grid-template-rows: rem(250);
+
+    @include breakpoint-down(small) {
+      justify-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(rem(140), rem(200)));
+    }
+
+    &__title {
+      text-align: center;
+      font-size: var(--font-l);
+      letter-spacing: 1.25px;
+      font-weight: 400;
+    }
+  }
+}

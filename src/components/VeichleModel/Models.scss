@@ -1,0 +1,55 @@
+@use '../../common/style/index' as *;
+
+.models {
+  &__container {
+    width: 100%;
+    padding-inline: rem(50);
+
+    @include breakpoint-down(small) {
+      padding-inline: rem(20);
+    }
+  }
+
+  &__header {
+    width: 100%;
+
+    display: flex;
+    padding-block: rem(30);
+    align-items: center;
+    justify-content: space-between;
+
+    .select {
+      margin-bottom: rem(32);
+      padding-block: rem(10);
+    }
+
+    &-left {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: end;
+      gap: rem(60);
+
+      @include breakpoint-down(medium) {
+        gap: rem(40);
+      }
+      @include breakpoint-down(small) {
+        .select__wrapper {
+          display: none;
+        }
+      }
+    }
+  }
+  &__search-filter {
+    width: rem(300);
+    border: 1px solid var(--clr-black);
+    border-radius: 0px;
+
+    @include breakpoint-down(medium) {
+      width: rem(200);
+    }
+    @include breakpoint-down(small) {
+      width: rem(150);
+    }
+  }
+}

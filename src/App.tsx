@@ -1,16 +1,18 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { AppRoutes } from './pages/AppRoutes';
+import { VeichleProvider } from './common/context/VeichleContext';
 
-import { Radio } from './components/Form/Radio';
+import { AppRoutes } from './pages/AppRoutes';
 
 import './common/style/style.scss';
 function App() {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <VeichleProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </VeichleProvider>
   );
 }
 

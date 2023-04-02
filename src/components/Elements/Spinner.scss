@@ -1,0 +1,38 @@
+@use '../../common//style/index' as *;
+.spinner {
+  border-radius: 50%;
+  position: absolute;
+  margin-inline: auto;
+  top: 50%;
+  left: 0;
+  right: 0;
+
+  &--sm {
+    border: 5px solid var(--clr-black);
+    border-top-color: white;
+
+    width: rem(25);
+    height: rem(25);
+  }
+
+  &--md {
+    border: 10px solid var(--clr-black);
+    border-top-color: white;
+    width: rem(50);
+    height: rem(50);
+  }
+
+  &--lg {
+    border: 12px solid var(--clr-black);
+    border-top-color: white;
+
+    width: rem(75);
+    height: rem(75);
+    @include breakpoint-down(small) {
+      width: rem(60);
+      height: rem(60);
+    }
+  }
+
+  animation: loading 1s linear infinite;
+}

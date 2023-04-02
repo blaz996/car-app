@@ -1,0 +1,31 @@
+@use '../../common/style/index' as *;
+
+.makes {
+  &__container {
+    width: 100%;
+    padding-inline: rem(50);
+
+    @include breakpoint-down(small) {
+      padding-inline: rem(20);
+    }
+  }
+
+  &__header {
+    width: 100%;
+
+    display: flex;
+    padding-block: rem(30);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__search-filter {
+    width: rem(300);
+    border: 1px solid var(--clr-black);
+    border-radius: 0px;
+
+    @include breakpoint-down(medium) {
+      width: rem(250);
+    }
+  }
+}
