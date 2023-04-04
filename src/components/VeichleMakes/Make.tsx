@@ -9,6 +9,7 @@ import { useVeichleStore } from '../../common/hooks/useVeichleStore';
 import { VeichleCard } from '../VeichleCard';
 
 import { VeichleMakeI } from '../../stores/store';
+import { ToggleFilter } from '../../common/utils/Filter';
 
 export const Make = ({ make }: { make: VeichleMakeI }) => {
   const navigate = useNavigate();
@@ -20,7 +21,8 @@ export const Make = ({ make }: { make: VeichleMakeI }) => {
   } = useDisclosure();
 
   const onClick = () => {
-    addFilter({ property: 'makeId', value: make.id });
+    const currFilter = new ToggleFilter('makeId', make.id, 'brand');
+    addFilter(currFilter);
     navigate('/models');
   };
 

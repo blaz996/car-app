@@ -5,6 +5,7 @@ import { Form } from '../Form/Form';
 import { Input } from '../Form/Input';
 import { Select } from '../Form/Select';
 import { Button } from '../Elements/Button';
+import { MODELS_TYPES } from '../../common/utils/data';
 
 import { useVeichleStore } from '../../common/hooks/useVeichleStore';
 
@@ -12,8 +13,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { observer } from 'mobx-react';
 
-import './VeichleForm.scss';
 import { VeichleModelI } from '../../stores/store';
+import { FiPrinter } from 'react-icons/fi';
+import { GiSilverBullet } from 'react-icons/gi';
+
+import '../VeichleForm.scss';
 
 export type ModelFormState = {
   name: string;
@@ -59,7 +63,9 @@ export const ModelForm = observer(
       const { modelMake, ...submitedModel } = formState;
       const makeId = getVeichleMakeId(modelMake);
       onSubmit({
-        ...submitedModel,
+        name: submitedModel.name.toLowerCase(),
+        imageUrl: submitedModel.imageUrl,
+        type: submitedModel.type,
         year: +submitedModel.year,
         price: +submitedModel.price,
         makeId,
@@ -83,7 +89,7 @@ export const ModelForm = observer(
               <p>Model Image</p>
             )}
           </div>
-          <Form onSubmit={handleSubmit} variant='model-form'>
+          <Form onSubmit={handleSubmit}>
             <Select
               required
               name='modelMake'
@@ -128,11 +134,11 @@ export const ModelForm = observer(
               value={formState.price}
               onChange={handleChange}
             />
-            <Input
-              required
+            <Select
               name='type'
+              options={MODELS_TYPES.map((type) => ({ label: type }))}
+              defaultValue='Select a type'
               label='Model Type'
-              placeholder='Model Type'
               value={formState.type}
               onChange={handleChange}
             />

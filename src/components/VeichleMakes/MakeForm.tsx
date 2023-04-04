@@ -7,6 +7,8 @@ import { Input } from '../Form/Input';
 import { Button } from '../Elements/Button';
 import { VeichleMakeI } from '../../stores/store';
 
+import '../VeichleForm.scss';
+
 type MakeFormProps = {
   initialState: MakeFormState;
   onSubmit: (make: Omit<VeichleMakeI, 'id'>) => void;
@@ -35,7 +37,10 @@ export const MakeForm = ({
   };
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await onSubmit({ ...formState });
+    await onSubmit({
+      name: formState.name.toLowerCase(),
+      imageUrl: formState.imageUrl,
+    });
     if (formType === 'add') {
       clearForm();
     } else {
@@ -55,25 +60,26 @@ export const MakeForm = ({
             <p>Make Image</p>
           )}
         </div>
+
+        <Form onSubmit={handleSubmit}>
+          <Input
+            name='imageUrl'
+            label='Make Image URL'
+            placeholder='Make Image URL'
+            onChange={handleChange}
+            value={formState.imageUrl}
+          />
+          <Input
+            required
+            name='name'
+            label='Make Name'
+            placeholder='Make Name'
+            onChange={handleChange}
+            value={formState.name}
+          />
+          <Button>Submit</Button>
+        </Form>
       </div>
-      <Form onSubmit={handleSubmit}>
-        <Input
-          name='imageUrl'
-          label='Make Image URL'
-          placeholder='Make Image URL'
-          onChange={handleChange}
-          value={formState.imageUrl}
-        />
-        <Input
-          required
-          name='name'
-          label='Make Name'
-          placeholder='Make Name'
-          onChange={handleChange}
-          value={formState.name}
-        />
-        <Button>Submit</Button>
-      </Form>
     </div>
   );
 };

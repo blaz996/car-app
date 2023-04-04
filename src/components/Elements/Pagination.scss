@@ -1,0 +1,23 @@
+@use '../../common/style/index' as *;
+
+.pagination {
+  display: flex;
+  gap: rem(15);
+
+  &__btn {
+    min-width: rem(40);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: rem(5) rem(10);
+    background-color: transparent;
+    border: 1px solid var(--clr-black);
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: black;
+      color: white;
+    }
+  }
+}

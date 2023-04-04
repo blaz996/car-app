@@ -33,6 +33,7 @@ export const Model = observer(({ model }: ModelProps) => {
   };
 
   const onClick = () => {
+    fetchModel(model.id);
     navigate(`${model.id}`);
   };
 

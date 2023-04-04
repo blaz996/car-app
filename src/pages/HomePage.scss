@@ -1,0 +1,81 @@
+@use '../common/style/index' as *;
+.homepage {
+  width: 100%;
+  height: 100%;
+
+  .hero {
+    &__model {
+      background-color: #000000;
+      background: linear-gradient(147deg, #000000de 0%, #434343f0 74%),
+        url('../../public/images/models-2.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    &__make {
+      background-color: #000000;
+      background: linear-gradient(147deg, #000000de 0%, #434343f0 74%),
+        url('../../public/images/makes-1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: rem(520);
+    width: 100%;
+    padding: rem(30) rem(20);
+    overflow: hidden;
+    z-index: 300;
+    &__link {
+      color: white;
+      border-bottom: 1px solid white;
+      padding-bottom: rem(5);
+      position: relative;
+      text-align: center;
+
+      font-size: var(--font-l);
+      width: rem(200);
+      transition: all 0.3s;
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 0;
+        left: 0;
+
+        background-color: white;
+        transition: height 0.6s;
+        border-radius: 10px;
+        z-index: -3;
+      }
+
+      &:hover {
+        color: black;
+        border-radius: 10px;
+        z-index: 20;
+      }
+
+      &:hover:before {
+        height: 100%;
+      }
+    }
+
+    &-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-img {
+      width: rem(350);
+      z-index: 1;
+      outline: 3px solid var(--clr-black);
+      height: rem(300);
+    }
+  }
+}

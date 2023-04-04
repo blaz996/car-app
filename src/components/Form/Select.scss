@@ -4,6 +4,7 @@
   padding: rem(8);
   border: 1px solid var(--clr-grey-1);
   cursor: pointer;
+  text-transform: uppercase;
 
   outline: none;
   &__wrapper {
@@ -11,5 +12,9 @@
     flex-direction: column;
     gap: rem(7);
     max-width: rem(250);
+  }
+
+  .option {
+    text-transform: uppercase;
   }
 }

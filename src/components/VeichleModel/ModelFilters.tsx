@@ -9,21 +9,13 @@ import { FilterT } from '../../common/types';
 import { VeichleMakeT } from '../../common/types';
 import { FilterGroup } from '../Elements/FilterGroup';
 import { FilterRange } from '../Elements/FilterRange';
+import { MODELS_TYPES } from '../../common/utils/data';
 
 import './ModelFilters.scss';
 
-const FILTER_CATEGORIES = ['Brands', 'Year', 'Price', 'Type'];
-
 export const ModelFilters = observer(() => {
-  const {
-    getMakeNames,
-    getMakeIds,
-    addFilter,
-    removeFilter,
-    modelsStatus,
-    makesStatus,
-    getModelYears,
-  } = useVeichleStore();
+  const { getMakeNames, getMakeIds, modelsStatus, makesStatus } =
+    useVeichleStore();
 
   if (
     modelsStatus === 'loading' ||
@@ -33,48 +25,50 @@ export const ModelFilters = observer(() => {
   ) {
     return null;
   }
-  const makeIds = getMakeIds();
-  const makeNames = getMakeNames();
-  const modelYears = getModelYears();
-  const modelTypes = [
-    'Sedan',
-    'Coupe',
-    'Hatchback',
-    'Sports Car',
-    'Convertible',
-  ];
 
   const FILTERS = [
-    { property: 'makeId', values: getMakeIds(), labels: getMakeNames() },
-    { property: 'year', values: modelYears, labels: modelYears },
-    { property: 'price', values: [], labels: [] },
     {
-      property: 'types',
-      values: modelTypes,
-      labels: modelTypes,
+      category: 'brand',
+      property: 'makeId',
+      values: getMakeIds(),
+      labels: getMakeNames(),
+      type: 'toggle',
     },
+    {
+      category: 'type',
+      property: 'type',
+      values: MODELS_TYPES,
+      type: 'toggle',
+    },
+    {
+      category: 'year',
+      property: 'year',
+      values: [],
+
+      type: 'range',
+    },
+    { category: 'price', property: 'price', values: [], type: 'range' },
   ];
 
   return (
     <div className='model-filters'>
       <h3 className='model-filters__title'>FILTERS</h3>
-      {FILTER_CATEGORIES.map((category, i) => {
-        if (category === 'Price') {
+      {FILTERS.map((filter, i) => {
+        if (filter.type === 'range') {
           return (
-            <Accordion accordionTitle={category}>
-              <FilterRange />
+            <Accordion accordionTitle={filter.category + 's'}>
+              <FilterRange filter={filter} />
             </Accordion>
           );
         }
         return (
-          <Accordion accordionTitle={category}>
+          <Accordion accordionTitle={filter.category + 's'}>
             <FilterGroup
-              addFilter={addFilter}
-              removeFilter={removeFilter}
-              key={category}
-              property={FILTERS[i].property}
-              filterLabels={FILTERS[i].labels}
-              filterValues={FILTERS[i].values}
+              key={filter.category}
+              property={filter.property}
+              category={filter.category}
+              labels={filter.labels || filter.values}
+              values={filter.values}
             />
           </Accordion>
         );

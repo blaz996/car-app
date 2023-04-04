@@ -14,8 +14,14 @@ import { Model } from './Model';
 import { Button } from '../Elements/Button';
 import { SortT } from '../../common/types';
 import { ModelFilters } from './ModelFilters';
+import { ActiveFilter } from '../Elements/ActiveFilter';
 
 import './ModelsList.scss';
+import { autorun } from 'mobx';
+import { ToggleFilter } from '../../common/utils/Filter';
+import { toJS } from 'mobx';
+import { action } from 'mobx';
+import { Pagination } from '../Elements/Pagination';
 
 const MODELS_SORT_VALUES = [
   { label: 'Price (Highest)', ascending: true, value: 'price' },
@@ -25,14 +31,24 @@ const MODELS_SORT_VALUES = [
 ];
 
 export const ModelsList = observer(() => {
-  const { models, modelsStatus } = useVeichleStore();
+  const {
+    models,
+    modelsStatus,
+    filters,
+    sortValue,
+    currPage,
+    nextPage,
+    previousPage,
+    fetchModels,
+    toggleFilter,
+  } = useVeichleStore();
+
+  useEffect(() => {
+    fetchModels();
+  }, [filters, sortValue, currPage]);
 
   if (modelsStatus === 'loading') {
-    return (
-      <div className='models-list__container'>
-        <Spinner size='medium' />
-      </div>
-    );
+    return <Spinner size='medium' />;
   }
 
   if (modelsStatus === 'error') {
@@ -46,8 +62,14 @@ export const ModelsList = observer(() => {
       </div>
       <div className='models-list'>
         <div className='list__header'>
-          <h3 className='list__title'>All Models</h3>
-          <button className='list__filter'>
+          <h3 className='list__title'>Models</h3>
+          <div className='list__active-filters'>
+            {filters.map((filter) => (
+              <ActiveFilter filter={filter} />
+            ))}
+          </div>
+
+          <button className='list__filter-toggle'>
             <span>Filters</span>
             <AdjustmentsHorizontalIcon />
           </button>
@@ -61,6 +83,13 @@ export const ModelsList = observer(() => {
             ))}
           </ul>
         )}
+      </div>
+      <div className='models-list__pagination'>
+        <Pagination
+          currPage={currPage}
+          nextPage={nextPage}
+          previousPage={previousPage}
+        />
       </div>
     </div>
   );

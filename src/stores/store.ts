@@ -1,9 +1,18 @@
 import { Axios, AxiosResponse } from 'axios';
-import { autorun, makeAutoObservable, toJS, runInAction } from 'mobx';
+import {
+  autorun,
+  makeAutoObservable,
+  toJS,
+  runInAction,
+  observable,
+} from 'mobx';
+import { convertTypeAcquisitionFromJson } from 'typescript';
 import { axios } from '../common/lib/axios';
 
 import { SortValue } from '../common/types';
-import { VeichleModelT, VeichleMakeT, FilterT } from '../common/types';
+
+import { ToggleFilter, RangeFilter } from '../common/utils/Filter';
+import { SortI, Sort } from '../common/utils/Sort';
 
 export interface VeichleMakeI {
   name: string;
@@ -31,8 +40,12 @@ export class VeichleStore {
   public currMake: VeichleMakeI = {} as VeichleMakeI;
   public currMakeStatus = 'idle';
   public makesStatus = 'idle';
-  public filters: FilterT[] = [];
-  public sortValue: SortValue = {} as SortValue;
+  public filters: (ToggleFilter | RangeFilter)[] = [];
+  public sortValue: Sort = new Sort('year', false, 'Year (Latest)');
+  public yearFilters: number[] = [];
+  public currPage: number = 1;
+  public nextPageexists: boolean = false;
+  public prevPageExists: boolean = false;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -40,6 +53,26 @@ export class VeichleStore {
 
   getVeichleMakeId(makeName: string) {
     return this.makes.find((make) => make.name === makeName)!.id;
+  }
+
+  checkNextAndPrevPage(totalRecords: number) {
+    this.nextPageexists =
+      this.currPage + 1 > Math.ceil(totalRecords / 10) ? false : true;
+    this.prevPageExists = this.currPage - 1 === 0 ? false : true;
+  }
+
+  nextPage() {
+    if (this.nextPageexists) {
+      this.currPage += 1;
+    } else return;
+  }
+
+  previousPage() {
+    if (this.prevPageExists) {
+      this.currPage -= 1;
+    } else {
+      return;
+    }
   }
 
   async fetchMakes() {
@@ -54,6 +87,15 @@ export class VeichleStore {
       console.log(err);
       this.makesStatus = 'error';
     }
+  }
+
+  addSortValue(sort: Sort) {
+    this.sortValue = sort;
+  }
+
+  setYearFilters() {
+    const years = this.models.map((model) => model.year);
+    this.yearFilters = Array.from(new Set(years));
   }
 
   setMakes(data: VeichleMakeI[]) {
@@ -105,8 +147,18 @@ export class VeichleStore {
   async fetchModels() {
     try {
       this.modelsStatus = 'loading';
-      const { data } = await axios.get('/resources/VeichleModel');
+      if (this.filters.length !== 0) {
+        this.currPage = 1;
+      }
+      const { data } = await axios.get(
+        `/resources/VeichleModel/?sort=${this.sortValue.applySort()}${this.applyFilters()}&page=${
+          this.currPage
+        }`
+      );
+      console.log(data);
+
       runInAction(() => {
+        this.checkNextAndPrevPage(data.totalRecords);
         this.setModels(data.item);
         this.modelsStatus = 'success';
       });
@@ -116,14 +168,12 @@ export class VeichleStore {
     }
   }
 
-  getModelYears() {
-    const modelYears = this.models.map((model) => model.year);
-    return Array.from(new Set(modelYears));
-  }
-
   setModels(data: VeichleModelI[]) {
-    console.log(data);
-    this.models = data.map((data) => data);
+    const prices = this.models.map((model) => model.price);
+    console.log(Math.max(...prices));
+    this.models = data.map((data) => {
+      return data;
+    });
   }
 
   async fetchModel(id: string | undefined) {
@@ -191,27 +241,39 @@ export class VeichleStore {
     });
   }
 
-  addFilter(currFilter: FilterT) {
-    // IF THE CURRENT FILTER PROPERTY EXISTS REMOVE IT FIRST BEFORE ADDING THE NEW FILTER
+  toggleFilter(currFilter: ToggleFilter | RangeFilter) {
     if (
       this.filters.find((filter) => filter.property === currFilter.property)
     ) {
-      this.removeFilter(currFilter);
+      this.removeFilter(currFilter.property);
+      console.log('REMOVED');
     }
-    this.filters.push(currFilter);
-
-    console.log(toJS(this.filters));
+    this.addFilter(currFilter);
   }
 
-  removeFilter(currFilter: FilterT) {
+  addFilter(currFilter: ToggleFilter | RangeFilter) {
+    this.filters = [...this.filters, currFilter];
+  }
+
+  removeFilter(property: string) {
     this.filters = this.filters.filter(
-      (filter) => filter.property !== currFilter.property
+      (filter) => filter.property !== property
     );
     console.log(toJS(this.filters));
   }
 
   applyFilters() {
-    if (this.filters.length === 0) return;
+    if (this.filters.length === 0) return '';
+    let filterString = '&searchQuery=';
+    this.filters.forEach((filter, i) => {
+      if (i === 0) {
+        filterString += `WHERE ${filter.applyFilter()}`;
+      } else {
+        filterString += ` AND ${filter.applyFilter()}`;
+      }
+    });
+    console.log(filterString);
+    return filterString;
   }
 
   getMakes() {

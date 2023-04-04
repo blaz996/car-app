@@ -2,20 +2,25 @@ import React from 'react';
 
 import './Select.scss';
 
-type SelectProps<T> = {
-  options: T[];
+type SelectOption = {
+  label: string;
+  value?: string | number;
+};
+
+type SelectProps = {
+  options: SelectOption[];
   placeholder?: string;
   defaultValue?: string | number;
   label?: string;
 } & React.SelectHTMLAttributes<HTMLSelectElement>;
 
-export const Select = <T extends { label: string; value: string | number }>({
+export const Select = ({
   options,
   placeholder,
   defaultValue,
   label,
   ...props
-}: SelectProps<T>) => {
+}: SelectProps) => {
   return (
     <div className='select__wrapper'>
       {label && <p className='select__label'>{label}</p>}
@@ -24,14 +29,22 @@ export const Select = <T extends { label: string; value: string | number }>({
           {placeholder}
         </option>
         {options.map((option) => {
-          if (option.value === defaultValue) {
+          if ((option.value || option.label) === defaultValue) {
             return (
-              <option selected value={option.value}>
+              <option
+                className='option'
+                selected
+                value={option.value || option.label}
+              >
                 {option.label}
               </option>
             );
           }
-          return <option value={option.value}>{option.label}</option>;
+          return (
+            <option className='option' value={option.value}>
+              {option.label}
+            </option>
+          );
         })}
       </select>
     </div>

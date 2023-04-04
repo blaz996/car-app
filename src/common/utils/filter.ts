@@ -1,23 +1,32 @@
-export interface FilterI<T> {
+import { makeAutoObservable } from 'mobx';
+
+export interface FilterI {
   property: string;
   category: string;
-  value: T;
-  label?: T;
 }
 
-export interface RangeFilterI {
-  property: string;
-  category: string;
+export interface ToggleFilterI extends FilterI {
+  value: string | number;
+  label?: string | number;
+}
+
+export interface RangeFilterI extends FilterI {
   val1: number;
   val2: number;
 }
 
-class Filter<T> implements FilterI<T> {
+export interface SearchFilterI extends FilterI {
+  value: string;
+}
+
+export class ToggleFilter implements FilterI {
+  type: string = 'toggle';
   constructor(
     public property: string,
     public category: string,
-    public value: T,
-    public label?: T
+
+    public value: number | string,
+    public label?: number | string
   ) {
     this.property = property;
     this.category = category;
@@ -26,15 +35,19 @@ class Filter<T> implements FilterI<T> {
   }
 
   applyFilter() {
-    return `${this.property} = ${this.value}`;
+    return `"${this.property}" = '${this.value}'`;
   }
 
   renderFilter() {
+    if (this.property === 'makeId') {
+      return `${this.category}: ${this.label}`;
+    }
     return `${this.category}: ${this.value}`;
   }
 }
 
-class RangeFilter implements RangeFilterI {
+export class RangeFilter implements RangeFilterI {
+  type: string = 'range';
   constructor(
     public property: string,
     public category: string,
@@ -43,5 +56,15 @@ class RangeFilter implements RangeFilterI {
   ) {
     this.property = property;
     this.category = category;
+    this.val1 = val1;
+    this.val2 = val2;
+  }
+
+  applyFilter() {
+    return `"${this.property}" >= ${this.val1} AND "${this.property}" <= ${this.val2}`;
+  }
+
+  renderFilter() {
+    return `${this.category}: ${this.val1} - ${this.val2}`;
   }
 }

@@ -1,52 +1,59 @@
 import { observer } from 'mobx-react';
 import React, { useState } from 'react';
+import { Filter } from './Filter';
 import { FilterT } from '../../common/types';
 
 import { Form } from '../Form/Form';
-import { Filter } from './Filter';
+
+import { ToggleFilterI, ToggleFilter } from '../../common/utils/Filter';
+import { useVeichleStore } from '../../common/hooks/useVeichleStore';
 
 import './FilterGroup.scss';
 
 type FilterGroupProps = {
-  addFilter: (filter: FilterT) => void;
-  removeFilter: (filter: FilterT) => void;
-  filterValues: string[] | number[];
+  values: number[] | string[];
+  labels?: number[] | string[];
+  category: string;
   property: string;
-  filterLabels?: string[] | number[];
 };
 
 export const FilterGroup = observer(
-  ({
-    addFilter,
-    removeFilter,
-    filterValues,
-    property,
-    filterLabels,
-  }: FilterGroupProps) => {
+  ({ values, category, property, labels }: FilterGroupProps) => {
     const [activeFilter, setActiveFilter] = useState<string | number>('');
+
+    const { toggleFilter, removeFilter } = useVeichleStore();
 
     const handleChange = (
       e: React.MouseEvent<HTMLInputElement>,
-      filter: FilterT
+      filter: ToggleFilterI
     ) => {
+      const currFilter = new ToggleFilter(
+        filter.property,
+        filter.category,
+        filter.value,
+        filter.label
+      );
       if (filter.value === activeFilter) {
         setActiveFilter('');
-        removeFilter(filter);
+        removeFilter(currFilter.property);
       } else {
         setActiveFilter(filter.value);
-        addFilter(filter);
+        toggleFilter(currFilter);
       }
     };
 
     return (
       <div className='filter__group'>
-        {filterValues.map((filterV, i) => {
+        {values.map((value, i) => {
           return (
             <Filter
               currFilter={activeFilter}
-              property={property}
-              label={filterLabels![i] || filterV}
-              value={filterV}
+              filter={{
+                category,
+                property,
+                value,
+                label: labels![i] || value,
+              }}
               handleChange={handleChange}
             />
           );

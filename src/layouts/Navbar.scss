@@ -1,5 +1,4 @@
-@use '../common/style/variables' as *;
-@use '../common/style/functions' as *;
+@use '../common/style/index' as *;
 
 .navbar {
   background-color: var(--clr-black);
@@ -9,16 +8,30 @@
   justify-content: space-between;
   align-items: center;
 
+  @include breakpoint-down(small) {
+    padding-inline: rem(30);
+  }
+
   &__logo {
     display: flex;
     align-items: center;
     gap: rem(10);
-    font-size: var(--font-700);
+    font-size: var(--font-600);
+
+    svg {
+      @include breakpoint-down(small) {
+        display: none;
+      }
+    }
   }
 
   &__links {
     display: flex;
     gap: rem(50);
+
+    @include breakpoint-down(small) {
+      gap: rem(15);
+    }
   }
 
   &__link {

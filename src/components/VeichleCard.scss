@@ -1,7 +1,6 @@
 @use '../common/style/index' as *;
 .veichle-card {
   position: relative;
-  max-width: rem(200);
 
   display: flex;
   flex-direction: column;
@@ -26,23 +25,19 @@
     color: white;
     font-size: var(--font-500);
     transition: all 0.3s;
+    background-color: var(--clr-black);
+
+    &:hover {
+      background-color: rgb(85, 85, 85);
+    }
   }
 
   &__remove {
-    background-color: var(--clr-red);
     right: 0;
-    &:hover {
-      background-color: var(--clr-red-light);
-    }
   }
 
   &__edit {
-    background-color: var(--clr-green);
     left: 0;
-
-    &:hover {
-      background-color: var(--clr-green-light);
-    }
   }
 
   &__head {
@@ -71,16 +66,17 @@
     padding-block: rem(20);
     display: flex;
     flex-direction: column;
-    max-width: rem(200);
     word-break: break-all;
 
     justify-content: center;
+    align-items: center;
     gap: rem(15);
   }
 
   &__name {
     font-size: var(--font-500);
-    text-align: center;
+    text-transform: uppercase;
+
     font-weight: 600;
   }
 
@@ -97,7 +93,7 @@
     .veichle-card__img {
       border-radius: 0;
       border: none;
-      width: rem(100);
+      width: rem(125);
       height: rem(100);
     }
   }

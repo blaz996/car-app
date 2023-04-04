@@ -23,7 +23,7 @@
     display: grid;
     justify-content: center;
     gap: rem(40);
-    grid-template-columns: repeat(auto-fit, minmax(rem(170), rem(220)));
+    grid-template-columns: repeat(auto-fit, minmax(rem(200), rem(220)));
     grid-template-rows: rem(250);
 
     @include breakpoint-down(small) {

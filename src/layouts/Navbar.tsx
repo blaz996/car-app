@@ -15,7 +15,7 @@ export const Navbar = () => {
       <nav className='navbar'>
         <div className='navbar__logo'>
           <GiCarWheel />
-          <span>Cars</span>
+          <span>Veichle Center</span>
         </div>
         <ul className='navbar__links'>
           <li>

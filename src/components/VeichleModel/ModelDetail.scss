@@ -1,0 +1,106 @@
+@use '../../common/style/index' as *;
+
+.model-detail {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: rem(60) rem(40);
+
+  gap: rem(80);
+  @include breakpoint-down(medium) {
+    gap: rem(60);
+  }
+  @include breakpoint-down(smallish) {
+    grid-template-columns: 1fr;
+    gap: rem(60);
+    justify-content: center;
+  }
+
+  &__title {
+    text-align: center;
+    padding-top: rem(30);
+    font-size: var(--font-l);
+    font-weight: 300;
+    letter-spacing: 1.5px;
+  }
+
+  &__img {
+    &-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    outline: 5px solid black;
+    max-width: 100%;
+    height: rem(450);
+    object-fit: contain;
+
+    @include breakpoint-down(smallish) {
+      max-width: 100%;
+      max-height: rem(300);
+    }
+    @include breakpoint-down(small) {
+      height: rem(250);
+    }
+  }
+
+  &__info {
+    &-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      @include breakpoint-down(smallish) {
+        align-items: center;
+        padding-bottom: rem(40);
+      }
+    }
+
+    &-list {
+      box-shadow: var(--shadow-light);
+      max-width: rem(500);
+      padding: rem(20) rem(20);
+      background: var(--clr-grey-5);
+
+      @include breakpoint-down(smallish) {
+        width: 100%;
+      }
+    }
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: rem(15);
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--clr-grey-4);
+    }
+
+    &:not(:first-child) {
+      margin-top: rem(20);
+    }
+    p {
+      font-size: var(--font-500);
+    }
+
+    &-label {
+      font-weight: 600;
+    }
+
+    &-value {
+      text-transform: uppercase;
+    }
+
+    &-buttons {
+      display: flex;
+      gap: rem(30);
+      justify-content: center;
+      margin-top: rem(40);
+
+      @include breakpoint-down(small) {
+        .btn {
+          padding: rem(8) rem(12);
+        }
+      }
+    }
+  }
+}

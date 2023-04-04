@@ -32,10 +32,10 @@
     overflow-y: auto;
     max-height: 0px;
 
-    transition: max-height 0.4s;
+    transition: max-height 0.5s;
 
     &--shown {
-      max-height: rem(300);
+      max-height: rem(100);
     }
   }
 }
