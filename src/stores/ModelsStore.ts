@@ -5,12 +5,12 @@ import { makeAutoObservable } from 'mobx';
 import { ModelsApiService } from './services/ApiServices';
 import { FilterMenuStore } from './FilterMenuStore';
 
-import { Sort } from '../common/utils/Sort';
+import { Sort } from '../common/utils/sort';
 
 import { runInAction } from 'mobx';
 
 import { VeichleMakeI } from './MakesStore';
-import { Filter } from '../common/utils/Filter';
+import { Filter } from '../common/utils/filter';
 import { axios } from '../common/lib/axios';
 
 export type VeichleModelI = {

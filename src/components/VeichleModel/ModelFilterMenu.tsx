@@ -8,7 +8,7 @@ import {
   MODELS_SORT_SELECT_OPTIONS,
   MODELS_SORT_VALUES,
 } from '../../common/utils/data';
-import { Sort } from '../../common/utils/Sort';
+import { Sort } from '../../common/utils/sort';
 import { Select } from '../Form/Select';
 import { Overlay } from '../../layouts/Overlay';
 

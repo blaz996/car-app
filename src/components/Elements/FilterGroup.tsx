@@ -1,5 +1,5 @@
 import { FilterButton } from './FilterButton';
-import { ToggleFilterI, ToggleFilter, Filter } from '../../common/utils/Filter';
+import { ToggleFilterI, ToggleFilter, Filter } from '../../common/utils/filter';
 
 import './FilterGroup.scss';
 

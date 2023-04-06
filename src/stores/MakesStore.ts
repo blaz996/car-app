@@ -1,10 +1,9 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { RootStore } from './RootStore';
 
-import { Sort } from '../common/utils/Sort';
+import { Sort } from '../common/utils/sort';
 import { MakesApiService } from './services/ApiServices';
-import { Filter } from '../common/utils/Filter';
-import axios from 'axios';
+import { Filter } from '../common/utils/filter';
 
 export type VeichleMakeI = {
   name: string;

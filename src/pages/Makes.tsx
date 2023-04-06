@@ -36,7 +36,7 @@ export const Makes = observer(() => {
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     let sortValue;
-  
+
     if (e.target.value === 'Name (Ascending)') {
       sortValue = new Sort('name', true, 'Name (Ascending)');
     } else {
@@ -45,7 +45,6 @@ export const Makes = observer(() => {
     makesStore.addSortValue(sortValue);
   };
 
-  // [{ label: 'Name (Ascending)' }, { label: 'Name (Descending)' }];
   return (
     <div className='makes__container'>
       <VeichleHeader

@@ -5,11 +5,6 @@ import { AppRoutes } from './common/routes/AppRoutes';
 
 import './common/style/style.scss';
 function App() {
-  const { modelsStore, makesStore } = useRootStore();
-
-  useEffect(() => {
-    modelsStore.setMakesFilters();
-  }, [makesStore.makes]);
   return (
     <BrowserRouter>
       <AppRoutes />

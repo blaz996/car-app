@@ -5,7 +5,7 @@ import { useRootStore } from '../../common/hooks/useRootStore';
 import { Make } from './Make';
 import { ActiveFilter } from '../Elements/ActiveFilter';
 import { Spinner } from '../Elements/Spinner';
-import { Sort } from '../../common/utils/Sort';
+import { Sort } from '../../common/utils/sort';
 import { Select } from '../Form/Select';
 
 import './MakesList.scss';

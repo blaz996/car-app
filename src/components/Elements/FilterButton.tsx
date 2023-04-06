@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import './FilterButton.scss';
-import { ToggleFilterI } from '../../common/utils/Filter';
+import { ToggleFilterI } from '../../common/utils/filter';
 import { Button } from './Button';
 
 type FilterProps = {
