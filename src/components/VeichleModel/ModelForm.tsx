@@ -142,7 +142,7 @@ export const ModelForm = observer(
               onChange={handleChange}
             />
 
-            <Button size='large' type='submit'>
+            <Button disabled={isSubmitting} size='large' type='submit'>
               Submit
             </Button>
           </Form>
