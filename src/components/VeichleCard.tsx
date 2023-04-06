@@ -13,6 +13,7 @@ type VeichleCardProps = {
   handleDelete: () => void;
   handleEdit: () => void;
   handleClick: () => void;
+  buttonText: string;
   variant?: string;
 };
 
@@ -23,6 +24,7 @@ export const VeichleCard = observer(
     handleEdit,
     handleClick,
     variant,
+    buttonText,
   }: VeichleCardProps) => {
     const { name, imageUrl, id } = content;
     return (
@@ -54,7 +56,7 @@ export const VeichleCard = observer(
           <p className='veichle-card__name'>{name}</p>
         </div>
         <Button onClick={handleClick} size='large'>
-          View details
+          {buttonText}
         </Button>
       </div>
     );

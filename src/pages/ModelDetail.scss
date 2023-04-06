@@ -1,4 +1,4 @@
-@use '../../common/style/index' as *;
+@use '../common/style/index' as *;
 
 .model-detail {
   width: 100%;
@@ -6,7 +6,6 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   padding: rem(60) rem(40);
-
   gap: rem(80);
   @include breakpoint-down(medium) {
     gap: rem(60);
@@ -50,6 +49,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-self: center;
 
       @include breakpoint-down(smallish) {
         align-items: center;
@@ -102,5 +102,15 @@
         }
       }
     }
+  }
+
+  &__error {
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    font-size: var(--font-l);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
   }
 }

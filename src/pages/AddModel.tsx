@@ -1,9 +1,9 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
-import { VeichleModelI } from '../../stores/store';
-import { ModelFormState } from './ModelForm';
 
-import { ModelForm } from './ModelForm';
+import { useRootStore } from '../common/hooks/useRootStore';
+import { VeichleModelI } from '../stores/ModelsStore';
+
+import { ModelForm } from '../components/VeichleModel/ModelForm';
 
 export const AddModel = () => {
   const initalState = {
@@ -12,13 +12,13 @@ export const AddModel = () => {
     name: '',
     year: '',
     price: '',
-    type: '',
+    type: 'Sedan',
   };
 
-  const { getVeichleMakeId, addModel } = useVeichleStore();
+  const { modelsStore } = useRootStore();
 
   const addModelSubmit = (model: Omit<VeichleModelI, 'id'>) => {
-    addModel(model);
+    modelsStore.createModel(model);
   };
 
   return <ModelForm initalState={initalState} onSubmit={addModelSubmit} />;

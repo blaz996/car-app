@@ -1,12 +1,9 @@
 import React from 'react';
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
 
 import { observer } from 'mobx-react';
+
+import { useRootStore } from '../../common/hooks/useRootStore';
 import { Accordion } from '../Elements/Accordion';
-import { Filter } from '../Elements/Filter';
-import { Radio } from '../Form/Radio';
-import { FilterT } from '../../common/types';
-import { VeichleMakeT } from '../../common/types';
 import { FilterGroup } from '../Elements/FilterGroup';
 import { FilterRange } from '../Elements/FilterRange';
 import { MODELS_TYPES } from '../../common/utils/data';
@@ -14,24 +11,17 @@ import { MODELS_TYPES } from '../../common/utils/data';
 import './ModelFilters.scss';
 
 export const ModelFilters = observer(() => {
-  const { getMakeNames, getMakeIds, modelsStatus, makesStatus } =
-    useVeichleStore();
+  const { makesStore, modelsStore } = useRootStore();
 
-  if (
-    modelsStatus === 'loading' ||
-    modelsStatus === 'error' ||
-    makesStatus === 'loading' ||
-    makesStatus === 'error'
-  ) {
-    return null;
-  }
+  const makeIds = modelsStore.makesFilters.map((make) => make.id);
+  const makeNames = modelsStore.makesFilters.map((make) => make.name);
 
   const FILTERS = [
     {
       category: 'brand',
       property: 'makeId',
-      values: getMakeIds(),
-      labels: getMakeNames(),
+      values: makeIds,
+      labels: makeNames,
       type: 'toggle',
     },
     {
@@ -56,14 +46,24 @@ export const ModelFilters = observer(() => {
       {FILTERS.map((filter, i) => {
         if (filter.type === 'range') {
           return (
-            <Accordion accordionTitle={filter.category + 's'}>
-              <FilterRange filter={filter} />
+            <Accordion
+              key={filter.category}
+              accordionTitle={filter.category + 's'}
+            >
+              <FilterRange
+                filter={filter}
+                handleSubmit={modelsStore.toggleFilter}
+              />
             </Accordion>
           );
         }
         return (
-          <Accordion accordionTitle={filter.category + 's'}>
+          <Accordion
+            key={filter.category}
+            accordionTitle={filter.category + 's'}
+          >
             <FilterGroup
+              onToggle={modelsStore.toggleFilter}
               key={filter.category}
               property={filter.property}
               category={filter.category}
@@ -76,21 +76,3 @@ export const ModelFilters = observer(() => {
     </div>
   );
 });
-
-/*
- {FILTER_CATEGORIES.map((category, i) => {
-        return (
-          <Accordion accordionTitle={category}>
-            <FilterGroup
-              addFilter={addFilter}
-              removeFilter={removeFilter}
-              key={category}
-              property={FILTERS[i].property}
-              filterLabels={FILTERS[i].labels}
-              filterValues={FILTERS[i].values}
-            />
-          </Accordion>
-        );
-      })}
-        );
-        */

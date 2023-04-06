@@ -7,15 +7,13 @@ import { Select } from '../Form/Select';
 import { Button } from '../Elements/Button';
 import { MODELS_TYPES } from '../../common/utils/data';
 
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
+import { useRootStore } from '../../common/hooks/useRootStore';
 
 import { useNavigate } from 'react-router-dom';
 
 import { observer } from 'mobx-react';
 
-import { VeichleModelI } from '../../stores/store';
-import { FiPrinter } from 'react-icons/fi';
-import { GiSilverBullet } from 'react-icons/gi';
+import { ModelsStore, VeichleModelI } from '../../stores/ModelsStore';
 
 import '../VeichleForm.scss';
 
@@ -36,15 +34,16 @@ type ModelFormProps = {
 
 export const ModelForm = observer(
   ({ formType = 'add', initalState, onSubmit }: ModelFormProps) => {
-    const { makes, getVeichleMakeId, removeMake } = useVeichleStore();
-
     const navigate = useNavigate();
 
-    const [formState, setFormState] = useState(initalState);
+    const { makesStore, modelsStore } = useRootStore();
 
-    const selectOptions = makes.map((model) => ({
-      value: model.name,
-      label: model.name,
+    const [formState, setFormState] = useState(initalState);
+    const [isSubmitting, setIsSubmiting] = useState(false);
+
+    const selectOptions = modelsStore.makesFilters.map((make) => ({
+      value: make.name,
+      label: make.name,
     }));
 
     const handleChange = (
@@ -59,22 +58,21 @@ export const ModelForm = observer(
     };
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+      setIsSubmiting(true);
       e.preventDefault();
       const { modelMake, ...submitedModel } = formState;
-      const makeId = getVeichleMakeId(modelMake);
+      const make = await makesStore.fetchMakeByName(modelMake);
       onSubmit({
         name: submitedModel.name.toLowerCase(),
         imageUrl: submitedModel.imageUrl,
         type: submitedModel.type,
         year: +submitedModel.year,
         price: +submitedModel.price,
-        makeId,
+        makeId: make.id,
       });
-      if (formType === 'add') {
-        clearForm();
-      } else {
-        navigate('/models');
-      }
+      setIsSubmiting(false);
+
+      navigate('/models');
     };
     return (
       <div className='veichle-form__container'>
@@ -122,6 +120,7 @@ export const ModelForm = observer(
               name='year'
               label='Model year'
               placeholder='Model year'
+              max={2025}
               value={formState.year}
               onChange={handleChange}
             />
@@ -130,6 +129,7 @@ export const ModelForm = observer(
               type='number'
               name='price'
               label='Model Price'
+              max={200000}
               placeholder='Model Price'
               value={formState.price}
               onChange={handleChange}
@@ -137,7 +137,6 @@ export const ModelForm = observer(
             <Select
               name='type'
               options={MODELS_TYPES.map((type) => ({ label: type }))}
-              defaultValue='Select a type'
               label='Model Type'
               value={formState.type}
               onChange={handleChange}

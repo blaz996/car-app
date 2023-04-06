@@ -2,30 +2,29 @@ import React, { useRef } from 'react';
 
 import { Input } from '../Form/Input';
 import { Button } from './Button';
-import { RangeFilter, RangeFilterI } from '../../common/utils/Filter';
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
+import {
+  Filter,
+  FilterI,
+  RangeFilter,
+  RangeFilterI,
+} from '../../common/utils/Filter';
 
 import './FilterRange.scss';
 
-export const FilterRange = ({
-  filter,
-}: {
-  filter: Omit<RangeFilterI, 'val1' | 'val2'>;
-}) => {
-  const { toggleFilter } = useVeichleStore();
+type FilterRangeProps = {
+  filter: FilterI;
+  handleSubmit: (filter: Filter) => void;
+};
+
+export const FilterRange = ({ filter, handleSubmit }: FilterRangeProps) => {
   const input1 = useRef<HTMLInputElement>(null);
   const input2 = useRef<HTMLInputElement>(null);
 
   const submitFilter = () => {
     const val1 = Number(input1.current?.value);
     const val2 = Number(input2.current?.value);
-    const currFilter = new RangeFilter(
-      filter.property,
-      filter.category,
-      val1,
-      val2
-    );
-    toggleFilter(currFilter);
+    const currFilter = new RangeFilter({ ...filter, val1, val2 });
+    handleSubmit(currFilter);
   };
   return (
     <div className='filter-range__container'>

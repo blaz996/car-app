@@ -1,6 +1,5 @@
-import { makeAutoObservable } from 'mobx';
-
 export interface FilterI {
+  type?: string;
   property: string;
   category: string;
 }
@@ -19,19 +18,31 @@ export interface SearchFilterI extends FilterI {
   value: string;
 }
 
-export class ToggleFilter implements FilterI {
-  type: string = 'toggle';
-  constructor(
-    public property: string,
-    public category: string,
+export class Filter implements FilterI {
+  type?: string = 'toggle';
+  property: string;
+  category: string;
+  constructor(filter: FilterI) {
+    this.property = filter.property;
+    this.category = filter.category;
+  }
 
-    public value: number | string,
-    public label?: number | string
-  ) {
-    this.property = property;
-    this.category = category;
-    this.value = value;
-    this.label = label || value;
+  applyFilter(): string {
+    return '';
+  }
+
+  renderFilter(): string {
+    return '';
+  }
+}
+
+export class ToggleFilter extends Filter implements ToggleFilterI {
+  value: string | number;
+  label?: string | number;
+  constructor(filter: ToggleFilterI) {
+    super({ category: filter.category, property: filter.property });
+    this.value = filter.value;
+    this.label = filter?.label || filter.value;
   }
 
   applyFilter() {
@@ -46,25 +57,47 @@ export class ToggleFilter implements FilterI {
   }
 }
 
-export class RangeFilter implements RangeFilterI {
+export class RangeFilter extends Filter implements RangeFilterI {
   type: string = 'range';
-  constructor(
-    public property: string,
-    public category: string,
-    public val1: number,
-    public val2: number
-  ) {
-    this.property = property;
-    this.category = category;
-    this.val1 = val1;
-    this.val2 = val2;
+  val1: number;
+  val2: number;
+  constructor(filter: RangeFilterI) {
+    super({
+      property: filter.property,
+      category: filter.category,
+      type: 'range',
+    });
+    this.val1 = filter.val1;
+    this.val2 = filter.val2;
   }
 
   applyFilter() {
+    console.log(
+      `"${this.property}" >= ${this.val1} AND "${this.property}" <= ${this.val2}`
+    );
     return `"${this.property}" >= ${this.val1} AND "${this.property}" <= ${this.val2}`;
   }
 
   renderFilter() {
     return `${this.category}: ${this.val1} - ${this.val2}`;
+  }
+}
+
+export class SearchFilter extends Filter implements SearchFilterI {
+  value: string;
+  constructor(filter: SearchFilterI) {
+    super({
+      property: filter.property,
+      category: filter.category,
+      type: 'search',
+    });
+    this.value = filter.value;
+  }
+  applyFilter() {
+    return `"${this.property}" LIKE '${this.value}%' OR "${this.property}" = '${this.value}'`;
+  }
+
+  renderFilter(): string {
+    return `${this.category}: ${this.value}`;
   }
 }

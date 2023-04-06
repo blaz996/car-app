@@ -1,12 +1,5 @@
-import { observer } from 'mobx-react';
-import React, { useState } from 'react';
-import { Filter } from './Filter';
-import { FilterT } from '../../common/types';
-
-import { Form } from '../Form/Form';
-
-import { ToggleFilterI, ToggleFilter } from '../../common/utils/Filter';
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
+import { FilterButton } from './FilterButton';
+import { ToggleFilterI, ToggleFilter, Filter } from '../../common/utils/Filter';
 
 import './FilterGroup.scss';
 
@@ -15,50 +8,37 @@ type FilterGroupProps = {
   labels?: number[] | string[];
   category: string;
   property: string;
+  onToggle: (filter: Filter) => void;
 };
 
-export const FilterGroup = observer(
-  ({ values, category, property, labels }: FilterGroupProps) => {
-    const [activeFilter, setActiveFilter] = useState<string | number>('');
+export const FilterGroup = ({
+  values,
+  category,
+  property,
+  labels,
+  onToggle,
+}: FilterGroupProps) => {
+  const handleToggle = (filter: ToggleFilterI) => {
+    const currFilter = new ToggleFilter({ ...filter });
+    onToggle(currFilter);
+  };
 
-    const { toggleFilter, removeFilter } = useVeichleStore();
-
-    const handleChange = (
-      e: React.MouseEvent<HTMLInputElement>,
-      filter: ToggleFilterI
-    ) => {
-      const currFilter = new ToggleFilter(
-        filter.property,
-        filter.category,
-        filter.value,
-        filter.label
-      );
-      if (filter.value === activeFilter) {
-        setActiveFilter('');
-        removeFilter(currFilter.property);
-      } else {
-        setActiveFilter(filter.value);
-        toggleFilter(currFilter);
-      }
-    };
-
-    return (
-      <div className='filter__group'>
-        {values.map((value, i) => {
-          return (
-            <Filter
-              currFilter={activeFilter}
-              filter={{
-                category,
-                property,
-                value,
-                label: labels![i] || value,
-              }}
-              handleChange={handleChange}
-            />
-          );
-        })}
-      </div>
-    );
-  }
-);
+  return (
+    <div className='filter__group'>
+      {values.map((value, i) => {
+        return (
+          <FilterButton
+            key={value}
+            filter={{
+              category,
+              property,
+              value,
+              label: labels![i] || value,
+            }}
+            handleClick={handleToggle}
+          />
+        );
+      })}
+    </div>
+  );
+};

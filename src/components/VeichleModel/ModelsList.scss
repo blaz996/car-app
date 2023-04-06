@@ -1,34 +1,41 @@
 @use '../../common/style/index' as *;
 .models-list {
   height: 100%;
-  position: relative;
+
   &__container {
-    padding-block: rem(15) rem(40);
-    position: relative;
+    padding-bottom: rem(40);
 
     width: 100%;
     display: grid;
     gap: rem(80);
-    grid-template-columns: rem(250) 1fr;
+    grid-template-columns: rem(300) 1fr;
 
     @include breakpoint-down(medium) {
-      grid-template-columns: rem(200) 1fr;
+      grid-template-columns: rem(270) 1fr;
+
+      @include breakpoint-down(smallish) {
+        grid-template-columns: 1fr;
+        padding-inline: rem(20);
+      }
     }
+  }
+
+  &__filters {
     @include breakpoint-down(smallish) {
-      grid-template-columns: 1fr;
-      padding-inline: rem(20);
+      display: none;
     }
   }
 
   .list {
-    padding-block: rem(40);
+    padding-block: rem(40) rem(60);
     width: 100%;
+
     margin-top: rem(30);
     display: grid;
     justify-content: center;
 
     gap: rem(40);
-    grid-template-columns: repeat(auto-fit, minmax(rem(170), rem(220)));
+    grid-template-columns: repeat(auto-fit, minmax(rem(170), rem(200)));
     grid-template-rows: rem(250);
 
     @include breakpoint-down(small) {
@@ -40,8 +47,6 @@
       flex-direction: column;
       gap: rem(10);
       align-items: center;
-      position: relative;
-      justify-content: center;
 
       @include breakpoint-down(small) {
         align-items: start;
@@ -69,7 +74,7 @@
 
     &__filter-toggle {
       position: absolute;
-      right: rem(-20);
+      right: rem(10);
       cursor: pointer;
       margin-left: auto;
       border-radius: 4px;
@@ -105,22 +110,15 @@
     }
 
     &--empty {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%);
       color: var(--clr-grey-1);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       font-size: var(--font-700);
       letter-spacing: 1.25px;
-
-      @include breakpoint-down(smallish) {
-        top: rem(220);
-      }
-    }
-
-    @include breakpoint-down(medium) {
-      grid-template-columns: repeat(auto-fit, minmax(rem(170), rem(200)));
     }
   }
 
@@ -136,8 +134,8 @@
 
   &__pagination {
     position: absolute;
-    bottom: rem(20);
-    left: 57%;
+    bottom: rem(30);
+    left: 56%;
 
     @include breakpoint-down(smallish) {
       left: 50%;

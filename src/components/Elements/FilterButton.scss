@@ -1,0 +1,9 @@
+@use '../../common/style/index' as *;
+
+.filter-btn__container {
+  .btn {
+    padding: rem(5) rem(12);
+    text-transform: uppercase;
+    border-radius: 20px;
+  }
+}

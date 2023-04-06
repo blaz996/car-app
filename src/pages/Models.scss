@@ -1,9 +1,17 @@
-@use '../../common/style/index' as *;
+@use '../common/style/index' as *;
 
 .models {
   &__container {
     width: 100%;
     padding-inline: rem(50);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+
+    @include breakpoint-down(smallish) {
+      padding-inline: rem(30);
+    }
 
     @include breakpoint-down(small) {
       padding-inline: rem(20);
@@ -19,7 +27,6 @@
     justify-content: space-between;
 
     .form {
-      position: relative;
       .btn {
         position: absolute;
         top: rem(-20);
@@ -67,7 +74,6 @@
     width: rem(300);
     border: 1px solid var(--clr-black);
     border-radius: 0px;
-    position: relative;
 
     @include breakpoint-down(medium) {
       width: rem(200);

@@ -2,23 +2,19 @@ import { Button } from './Button';
 
 import './ActiveFilter..scss';
 
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
-import { RangeFilter, ToggleFilter } from '../../common/utils/Filter';
+import { Filter, RangeFilter, ToggleFilter } from '../../common/utils/Filter';
 
-type ActiveFilterProps = {};
+type ActiveFilterProps = {
+  filter: Filter;
+  handleRemove: (property: string, refetch: boolean) => void;
+};
 
-export const ActiveFilter = ({
-  filter,
-}: {
-  filter: RangeFilter | ToggleFilter;
-}) => {
-  const { removeFilter } = useVeichleStore();
-
+export const ActiveFilter = ({ filter, handleRemove }: ActiveFilterProps) => {
   return (
     <div className='active-filter'>
       <span className='active-filter__atributes'>{filter.renderFilter()}</span>
       <span
-        onClick={() => removeFilter(filter.property)}
+        onClick={() => handleRemove(filter.property, true)}
         className='active-filter__close'
       >
         x

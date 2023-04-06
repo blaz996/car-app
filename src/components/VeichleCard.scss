@@ -1,6 +1,7 @@
 @use '../common/style/index' as *;
 .veichle-card {
   position: relative;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
@@ -93,6 +94,7 @@
     .veichle-card__img {
       border-radius: 0;
       border: none;
+      object-fit: contain;
       width: rem(125);
       height: rem(100);
     }

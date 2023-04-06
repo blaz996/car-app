@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Overlay } from './Overlay';
+import { Overlay } from '../../layouts/Overlay';
 
 import './Modal.scss';
 

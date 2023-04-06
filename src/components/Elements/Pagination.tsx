@@ -2,8 +2,6 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { HiOutlineChevronRight, HiOutlineChevronLeft } from 'react-icons/hi';
 
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
-
 import './Pagination.scss';
 
 type PaginationProps = {

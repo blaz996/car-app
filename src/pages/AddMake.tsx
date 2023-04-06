@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
-import { VeichleMakeI } from '../../stores/store';
-import { MakeForm } from './MakeForm';
+import { useRootStore } from '../common/hooks/useRootStore';
+import { VeichleMakeI } from '../stores/MakesStore';
+import { MakeForm } from '../components/VeichleMakes/MakeForm';
 
 export const AddMake = () => {
-  const { addMake } = useVeichleStore();
+  const { makesStore } = useRootStore();
   const initialState = {
     name: '',
     imageUrl: '',
   };
   const addMakeSubmit = (make: Omit<VeichleMakeI, 'id'>) => {
-    addMake(make);
+    makesStore.createMake(make);
   };
   return <MakeForm onSubmit={addMakeSubmit} initialState={initialState} />;
 };

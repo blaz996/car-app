@@ -1,18 +1,17 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { flowResult } from 'mobx';
 
 import { Button } from '../Elements/Button';
-import { FilterT } from '../../common/types';
+
 import { Modal } from '../Elements/Modal';
 import { VeichleCard } from '../VeichleCard';
+import { useRootStore } from '../../common/hooks/useRootStore';
 
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
 import { useDisclosure } from '../../common/hooks/useDisclosure';
 
 import './ModelPreview.scss';
-import { VeichleModelI } from '../../stores/store';
+import { VeichleModelI } from '../../stores/ModelsStore';
 
 type ModelProps = {
   model: VeichleModelI;
@@ -24,21 +23,22 @@ export const Model = observer(({ model }: ModelProps) => {
     close: closeModal,
     isOpen: isModalOpen,
   } = useDisclosure();
-  const { removeModel, fetchModel } = useVeichleStore();
+  const { modelsStore } = useRootStore();
+
   const navigate = useNavigate();
 
   const deleteModel = async () => {
-    await removeModel(model.id);
+    await modelsStore.deleteModel(model.id);
     closeModal();
   };
 
   const onClick = () => {
-    fetchModel(model.id);
+    modelsStore.fetchModel(model.id, model.makeId);
     navigate(`${model.id}`);
   };
 
   const handleEdit = () => {
-    fetchModel(model.id);
+    modelsStore.fetchModel(model.id, model.makeId);
     navigate(`${model.id}/editModel`);
   };
 
@@ -49,10 +49,17 @@ export const Model = observer(({ model }: ModelProps) => {
           <p>Are you sure you wish to remove this model?</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='red' onClick={deleteModel}>
+          <Button
+            disabled={modelsStore.isDeleting}
+            variant='red'
+            onClick={deleteModel}
+          >
             Delete
           </Button>
-          <Button onClick={closeModal}> Cancel</Button>
+          <Button disabled={modelsStore.isDeleting} onClick={closeModal}>
+            {' '}
+            Cancel
+          </Button>
         </Modal.Footer>
       </Modal>
       <VeichleCard
@@ -60,6 +67,7 @@ export const Model = observer(({ model }: ModelProps) => {
         handleClick={onClick}
         handleDelete={openModal}
         handleEdit={handleEdit}
+        buttonText='View Details'
       />
     </>
   );

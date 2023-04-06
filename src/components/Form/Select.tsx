@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Select.scss';
 
-type SelectOption = {
+export type SelectOption = {
   label: string;
   value?: string | number;
 };
@@ -32,6 +32,7 @@ export const Select = ({
           if ((option.value || option.label) === defaultValue) {
             return (
               <option
+                key={option.label}
                 className='option'
                 selected
                 value={option.value || option.label}
@@ -41,7 +42,11 @@ export const Select = ({
             );
           }
           return (
-            <option className='option' value={option.value}>
+            <option
+              key={option.label}
+              className='option'
+              value={option.value || option.label}
+            >
               {option.label}
             </option>
           );

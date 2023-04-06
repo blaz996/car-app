@@ -2,14 +2,11 @@ import React, { useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { GiCarWheel } from 'react-icons/gi';
 
-import { VeichleContext } from '../common/context/VeichleContext';
 import { Link } from 'react-router-dom';
 
 import './Navbar.scss';
 
 export const Navbar = () => {
-  const veichleStore = useContext(VeichleContext);
-  console.log(veichleStore);
   return (
     <>
       <nav className='navbar'>

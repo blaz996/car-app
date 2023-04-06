@@ -1,41 +1,92 @@
 @use '../../common/style/index' as *;
 .makes-list {
-  &__container {
-    padding-block: rem(40);
-    width: 100%;
-    display: grid;
-    gap: rem(80);
-    grid-template-columns: rem(250) 1fr;
-
-    @include breakpoint-down(medium) {
-      grid-template-columns: rem(200) 1fr;
-    }
-    @include breakpoint-down(smallish) {
-      grid-template-columns: 1fr;
-      padding-inline: rem(20);
-    }
-  }
-
   .list {
-    padding-block: rem(40);
     width: 100%;
     margin-top: rem(30);
+    margin-block: rem(60) rem(90);
     display: grid;
     justify-content: center;
+
     gap: rem(40);
-    grid-template-columns: repeat(auto-fit, minmax(rem(200), rem(220)));
+    grid-template-columns: repeat(auto-fit, minmax(rem(190), rem(220)));
     grid-template-rows: rem(250);
 
     @include breakpoint-down(small) {
       justify-items: center;
-      grid-template-columns: repeat(auto-fit, minmax(rem(140), rem(200)));
+      grid-template-columns: repeat(auto-fit, minmax(rem(170), rem(200)));
+    }
+
+    &__header {
+      display: flex;
+      flex-direction: column;
+      gap: rem(10);
+      align-items: center;
+
+      @include breakpoint-down(small) {
+        align-items: start;
+      }
+
+      .select__wrapper {
+        display: none;
+        position: absolute;
+        right: rem(5);
+
+        @include breakpoint-down(small) {
+          display: block;
+          right: rem(20);
+
+          .select {
+            width: rem(80);
+          }
+        }
+      }
     }
 
     &__title {
-      text-align: center;
-      font-size: var(--font-l);
+      font-size: var(--font-800);
       letter-spacing: 1.25px;
-      font-weight: 400;
+      font-weight: 500;
     }
+
+    &__active-filters {
+      max-width: rem(300);
+      display: flex;
+      gap: rem(10);
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      @include breakpoint-down(small) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    &__error {
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      font-size: var(--font-l);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%);
+    }
+
+    &--empty {
+      color: var(--clr-grey-1);
+      font-size: var(--font-700);
+      letter-spacing: 1.25px;
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%);
+    }
+  }
+
+  &__pagination {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    bottom: rem(15);
   }
 }

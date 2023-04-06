@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
+import { RootStoreProvider } from './common/context/RootStoreContext';
+
 import './common/style/style.scss';
 
 const root = ReactDOM.createRoot(
@@ -9,6 +11,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <RootStoreProvider>
+      <App />
+    </RootStoreProvider>
   </React.StrictMode>
 );

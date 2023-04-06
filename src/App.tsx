@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-
-import { VeichleProvider } from './common/context/VeichleContext';
-
-import { AppRoutes } from './pages/AppRoutes';
+import { useRootStore } from './common/hooks/useRootStore';
+import { AppRoutes } from './common/routes/AppRoutes';
 
 import './common/style/style.scss';
 function App() {
+  const { modelsStore, makesStore } = useRootStore();
+
+  useEffect(() => {
+    modelsStore.setMakesFilters();
+  }, [makesStore.makes]);
   return (
-    <VeichleProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </VeichleProvider>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 

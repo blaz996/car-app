@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Routes, Route } from 'react-router-dom';
-import { Makes } from '../components/VeichleMakes/Makes';
-import { AddMake } from '../components/VeichleMakes/AddMake';
-import { EditMake } from '../components/VeichleMakes/EditMake';
+import { Makes } from '../../pages/Makes';
+import { AddMake } from '../../pages/AddMake';
+import { EditMake } from '../../pages/EditMake';
 
 export const MakesRoutes = () => {
   return (

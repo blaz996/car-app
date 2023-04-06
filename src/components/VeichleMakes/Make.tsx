@@ -1,19 +1,21 @@
 import React from 'react';
 import { useDisclosure } from '../../common/hooks/useDisclosure';
 import { useNavigate } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
 import { Modal } from '../Elements/Modal';
 import { Button } from '../Elements/Button';
 
-import { useVeichleStore } from '../../common/hooks/useVeichleStore';
+import { useRootStore } from '../../common/hooks/useRootStore';
 import { VeichleCard } from '../VeichleCard';
 
-import { VeichleMakeI } from '../../stores/store';
+import { VeichleMakeI } from '../../stores/MakesStore';
 import { ToggleFilter } from '../../common/utils/Filter';
 
-export const Make = ({ make }: { make: VeichleMakeI }) => {
+export const Make = observer(({ make }: { make: VeichleMakeI }) => {
   const navigate = useNavigate();
-  const { addFilter, fetchMake, removeMake, deleteModels } = useVeichleStore();
+  const { makesStore, modelsStore } = useRootStore();
+
   const {
     open: openModal,
     close: closeModal,
@@ -21,18 +23,23 @@ export const Make = ({ make }: { make: VeichleMakeI }) => {
   } = useDisclosure();
 
   const onClick = () => {
-    const currFilter = new ToggleFilter('makeId', make.id, 'brand');
-    addFilter(currFilter);
+    const currFilter = new ToggleFilter({
+      property: 'makeId',
+      value: make.id,
+      label: make.name,
+      category: 'brand',
+    });
+    modelsStore.toggleFilter(currFilter);
     navigate('/models');
   };
 
   const deleteMake = async () => {
-    await removeMake(make.id);
+    await makesStore.deleteMake(make.id);
     closeModal();
   };
 
   const handleEdit = () => {
-    fetchMake(make.id);
+    makesStore.fetchMake(make.id);
     navigate(`${make.id}/editMake`);
   };
 
@@ -46,10 +53,16 @@ export const Make = ({ make }: { make: VeichleMakeI }) => {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='red' onClick={deleteMake}>
+          <Button
+            disabled={makesStore.isDeleting}
+            variant='red'
+            onClick={deleteMake}
+          >
             Delete
           </Button>
-          <Button onClick={closeModal}> Cancel</Button>
+          <Button disabled={makesStore.isDeleting} onClick={closeModal}>
+            Cancel
+          </Button>
         </Modal.Footer>
       </Modal>
 
@@ -59,7 +72,8 @@ export const Make = ({ make }: { make: VeichleMakeI }) => {
         handleEdit={handleEdit}
         handleClick={onClick}
         variant='make'
+        buttonText='View Models'
       />
     </>
   );
-};
+});

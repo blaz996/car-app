@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { flowResult } from 'mobx';
+
 import { useNavigate } from 'react-router-dom';
 
 import { Form } from '../Form/Form';
 import { Input } from '../Form/Input';
 import { Button } from '../Elements/Button';
-import { VeichleMakeI } from '../../stores/store';
+import { VeichleMakeI } from '../../stores/MakesStore';
+import { useRootStore } from '../../common/hooks/useRootStore';
 
 import '../VeichleForm.scss';
 
@@ -25,7 +26,10 @@ export const MakeForm = ({
   initialState,
   onSubmit,
 }: MakeFormProps) => {
+  const { makesStore } = useRootStore();
   const [formState, setFormState] = useState(initialState);
+  const [formError, setFormError] = useState('');
+  const [isSubmiting, setIsSubmiting] = useState(false);
   const navigate = useNavigate();
 
   const clearForm = () => {
@@ -36,16 +40,22 @@ export const MakeForm = ({
     setFormState((prevState) => ({ ...prevState, [name]: value }));
   };
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    setIsSubmiting(true);
+    setFormError('');
     e.preventDefault();
+    const makeExists = await makesStore.fetchMakeByName(formState.name);
+    if (makeExists) {
+      setFormError('Make name already exists');
+      setIsSubmiting(false);
+      return;
+    }
     await onSubmit({
       name: formState.name.toLowerCase(),
       imageUrl: formState.imageUrl,
     });
-    if (formType === 'add') {
-      clearForm();
-    } else {
-      navigate('/makes');
-    }
+    setIsSubmiting(false);
+
+    navigate('/makes');
   };
   return (
     <div className='veichle-form__container'>
@@ -53,6 +63,7 @@ export const MakeForm = ({
         {formType === 'add' ? 'New Make' : 'Edit Make'}
       </h1>
       <div className='veichle-form__content'>
+        {formError && <div className='veichle-form__error'>{formError}</div>}
         <div className='veichle-form__img-wrapper'>
           {formState.imageUrl ? (
             <img className='veichle-form__img' src={formState.imageUrl} />
@@ -77,7 +88,7 @@ export const MakeForm = ({
             onChange={handleChange}
             value={formState.name}
           />
-          <Button>Submit</Button>
+          <Button disabled={isSubmiting}>Submit</Button>
         </Form>
       </div>
     </div>

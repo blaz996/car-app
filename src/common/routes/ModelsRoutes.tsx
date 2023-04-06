@@ -1,9 +1,9 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Models } from '../components/VeichleModel/Models';
-import { ModelDetail } from '../components/VeichleModel/ModelDetail';
-import { AddModel } from '../components/VeichleModel/AddModel';
-import { EditModel } from '../components/VeichleModel/EditModel';
+import { Models } from '../../pages/Models';
+import { ModelDetail } from '../../pages/ModelDetail';
+import { AddModel } from '../../pages/AddModel';
+import { EditModel } from '../../pages/EditModel';
 
 export const ModelsRoutes = () => {
   return (
