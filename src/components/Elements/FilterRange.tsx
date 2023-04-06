@@ -7,7 +7,7 @@ import {
   FilterI,
   RangeFilter,
   RangeFilterI,
-} from '../../common/utils/Filter';
+} from '../../common/utils/filter';
 
 import './FilterRange.scss';
 

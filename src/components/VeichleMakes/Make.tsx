@@ -10,7 +10,7 @@ import { useRootStore } from '../../common/hooks/useRootStore';
 import { VeichleCard } from '../VeichleCard';
 
 import { VeichleMakeI } from '../../stores/MakesStore';
-import { ToggleFilter } from '../../common/utils/Filter';
+import { ToggleFilter } from '../../common/utils/filter';
 
 export const Make = observer(({ make }: { make: VeichleMakeI }) => {
   const navigate = useNavigate();

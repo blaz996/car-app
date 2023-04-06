@@ -8,9 +8,9 @@ import {
 } from '../common/utils/data';
 import { VeichleHeader } from '../layouts/VeichleHeader';
 import { ModelsList } from '../components/VeichleModel/ModelsList';
-import { SearchFilter } from '../common/utils/Filter';
+import { SearchFilter } from '../common/utils/filter';
 import { useRootStore } from '../common/hooks/useRootStore';
-import { Sort } from '../common/utils/Sort';
+import { Sort } from '../common/utils/sort';
 
 import './Models.scss';
 

@@ -2,7 +2,7 @@ import { Button } from './Button';
 
 import './ActiveFilter..scss';
 
-import { Filter, RangeFilter, ToggleFilter } from '../../common/utils/Filter';
+import { Filter, RangeFilter, ToggleFilter } from '../../common/utils/filter';
 
 type ActiveFilterProps = {
   filter: Filter;

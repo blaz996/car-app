@@ -6,12 +6,12 @@ import { Button } from '../components/Elements/Button';
 import { MakeList } from '../components/VeichleMakes/MakesList';
 import { Select } from '../components/Form/Select';
 import { Form } from '../components/Form/Form';
-import { SearchFilter } from '../common/utils/Filter';
+import { SearchFilter } from '../common/utils/filter';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useRootStore } from '../common/hooks/useRootStore';
 
 import './Makes.scss';
-import { Sort } from '../common/utils/Sort';
+import { Sort } from '../common/utils/sort';
 import { VeichleHeader } from '../layouts/VeichleHeader';
 
 export const Makes = observer(() => {
