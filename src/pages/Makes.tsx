@@ -16,6 +16,7 @@ import { VeichleHeader } from '../layouts/VeichleHeader';
 
 export const Makes = observer(() => {
   const { makesStore } = useRootStore();
+  const { paginationService, filtersService } = makesStore;
 
   const handleSearchBarSubmit = (
     e: React.ChangeEvent<HTMLFormElement>,
@@ -23,7 +24,7 @@ export const Makes = observer(() => {
   ) => {
     e.preventDefault();
     if (searchValue === '') {
-      makesStore.removeFilter('name', true);
+      filtersService.removeFilter('name', true);
       return;
     }
     const filter = new SearchFilter({
@@ -31,7 +32,7 @@ export const Makes = observer(() => {
       property: 'name',
       value: searchValue,
     });
-    makesStore.toggleFilter(filter);
+    filtersService.toggleFilter(filter);
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -42,7 +43,7 @@ export const Makes = observer(() => {
     } else {
       sortValue = new Sort('name', false, 'Name (Descending)');
     }
-    makesStore.addSortValue(sortValue);
+    filtersService.addSortValue(sortValue);
   };
 
   return (
@@ -56,7 +57,7 @@ export const Makes = observer(() => {
         ]}
         linkRoute='addMake'
         linkText='Add Make'
-        selectDefaultValue={makesStore.sortValue.label}
+        selectDefaultValue={filtersService.sortValue.label}
       />
       <MakeList />
     </div>

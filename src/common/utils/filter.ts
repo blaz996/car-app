@@ -27,7 +27,7 @@ export class Filter implements FilterI {
     this.category = filter.category;
   }
 
-  applyFilter(): string {
+  applyFilter(arg?: any): string {
     return '';
   }
 
@@ -93,8 +93,12 @@ export class SearchFilter extends Filter implements SearchFilterI {
     });
     this.value = filter.value;
   }
-  applyFilter() {
-    return `"${this.property}" LIKE '${this.value}%' OR "${this.property}" = '${this.value}'`;
+  applyFilter(pos: number) {
+    if (pos !== 0) {
+      return `("${this.property}" LIKE '${this.value}%' OR "${this.property}" = '${this.value}')`;
+    } else {
+      return `"${this.property}" LIKE '${this.value}%' OR "${this.property}" = '${this.value}'`;
+    }
   }
 
   renderFilter(): string {

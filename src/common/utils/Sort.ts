@@ -17,7 +17,7 @@ export class Sort implements SortI {
 
   applySort() {
     const str = `${this.property}|${this.ascending ? 'asc' : 'desc'}`;
-    console.log(str);
+
     return str;
   }
 }

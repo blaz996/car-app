@@ -9,7 +9,7 @@ import { Button } from '../Elements/Button';
 import { useRootStore } from '../../common/hooks/useRootStore';
 import { VeichleCard } from '../VeichleCard';
 
-import { VeichleMakeI } from '../../stores/MakesStore';
+import { VeichleMakeI } from '../../stores/makesStore';
 import { ToggleFilter } from '../../common/utils/filter';
 
 export const Make = observer(({ make }: { make: VeichleMakeI }) => {
@@ -29,7 +29,7 @@ export const Make = observer(({ make }: { make: VeichleMakeI }) => {
       label: make.name,
       category: 'brand',
     });
-    modelsStore.toggleFilter(currFilter);
+    modelsStore.filtersService.toggleFilter(currFilter);
     navigate('/models');
   };
 

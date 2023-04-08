@@ -11,10 +11,11 @@ import { MODELS_TYPES } from '../../common/utils/data';
 import './ModelFilters.scss';
 
 export const ModelFilters = observer(() => {
-  const { makesStore, modelsStore } = useRootStore();
+  const { modelsStore, makesStore } = useRootStore();
+  const { filtersService } = modelsStore;
 
-  const makeIds = modelsStore.makesFilters.map((make) => make.id);
-  const makeNames = modelsStore.makesFilters.map((make) => make.name);
+  const makeIds = makesStore.makesFilters.map((make) => make.id);
+  const makeNames = makesStore.makesFilters.map((make) => make.name);
 
   const FILTERS = [
     {
@@ -52,7 +53,7 @@ export const ModelFilters = observer(() => {
             >
               <FilterRange
                 filter={filter}
-                handleSubmit={modelsStore.toggleFilter}
+                handleSubmit={filtersService.toggleFilter}
               />
             </Accordion>
           );
@@ -63,7 +64,7 @@ export const ModelFilters = observer(() => {
             accordionTitle={filter.category + 's'}
           >
             <FilterGroup
-              onToggle={modelsStore.toggleFilter}
+              onToggle={filtersService.toggleFilter}
               key={filter.category}
               property={filter.property}
               category={filter.category}

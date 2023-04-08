@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form } from '../Form/Form';
 import { Input } from '../Form/Input';
 import { Button } from '../Elements/Button';
-import { VeichleMakeI } from '../../stores/MakesStore';
+import { VeichleMakeI } from '../../stores/makesStore';
 import { useRootStore } from '../../common/hooks/useRootStore';
 
 import '../VeichleForm.scss';

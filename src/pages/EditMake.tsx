@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import { Spinner } from '../components/Elements/Spinner';
 
 import { MakeForm } from '../components/VeichleMakes/MakeForm';
-import { VeichleMakeI } from '../stores/MakesStore';
+import { VeichleMakeI } from '../stores/makesStore';
 
 import { useRootStore } from '../common/hooks/useRootStore';
 

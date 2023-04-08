@@ -11,7 +11,7 @@ import { useRootStore } from '../../common/hooks/useRootStore';
 import { useDisclosure } from '../../common/hooks/useDisclosure';
 
 import './ModelPreview.scss';
-import { VeichleModelI } from '../../stores/ModelsStore';
+import { VeichleModelI } from '../../stores/modelsStore';
 
 type ModelProps = {
   model: VeichleModelI;

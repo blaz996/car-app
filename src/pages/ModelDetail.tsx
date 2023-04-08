@@ -27,7 +27,7 @@ export const ModelDetail = observer(() => {
     navigate('/models');
   };
 
-  if (modelsStore.modelStatus === 'loading' || !modelsStore.currModelMakeName) {
+  if (modelsStore.modelStatus === 'loading') {
     return <Spinner size='large' />;
   }
 

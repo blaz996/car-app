@@ -59,6 +59,16 @@
     text-align: center;
     border-radius: 5px;
   }
+
+  &--empty {
+    font-size: var(--font-800);
+    color: var(--clr-grey-1);
+    font-weight: 400;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
+  }
 }
 
 .form {

@@ -2,32 +2,19 @@
 .models-list {
   height: 100%;
 
-  &__container {
-    padding-bottom: rem(40);
-
-    width: 100%;
-    display: grid;
-    gap: rem(80);
-    grid-template-columns: rem(300) 1fr;
-
-    @include breakpoint-down(medium) {
-      grid-template-columns: rem(270) 1fr;
-
-      @include breakpoint-down(smallish) {
-        grid-template-columns: 1fr;
-        padding-inline: rem(20);
-      }
-    }
-  }
-
-  &__filters {
-    @include breakpoint-down(smallish) {
-      display: none;
-    }
+  &__error-msg {
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    font-size: var(--font-l);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
   }
 
   .list {
     padding-block: rem(40) rem(60);
+    position: relative;
     width: 100%;
 
     margin-top: rem(30);
@@ -120,16 +107,6 @@
       font-size: var(--font-700);
       letter-spacing: 1.25px;
     }
-  }
-
-  &__error-msg {
-    font-weight: 400;
-    letter-spacing: 1.5px;
-    font-size: var(--font-l);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%);
   }
 
   &__pagination {

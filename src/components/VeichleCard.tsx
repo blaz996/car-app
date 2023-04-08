@@ -1,6 +1,5 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
 import { GoTrashcan } from 'react-icons/go';
 import { FiEdit } from 'react-icons/fi';
 

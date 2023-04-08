@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Form } from '../Form/Form';
@@ -13,9 +13,10 @@ import { useNavigate } from 'react-router-dom';
 
 import { observer } from 'mobx-react';
 
-import { ModelsStore, VeichleModelI } from '../../stores/ModelsStore';
+import { ModelsStore, VeichleModelI } from '../../stores/modelsStore';
 
 import '../VeichleForm.scss';
+import { Spinner } from '../Elements/Spinner';
 
 export type ModelFormState = {
   name: string;
@@ -38,10 +39,16 @@ export const ModelForm = observer(
 
     const { makesStore, modelsStore } = useRootStore();
 
+    useEffect(() => {
+      if (makesStore.makesFilters.length === 0) {
+        makesStore.setMakesFilters();
+      }
+    });
+
     const [formState, setFormState] = useState(initalState);
     const [isSubmitting, setIsSubmiting] = useState(false);
 
-    const selectOptions = modelsStore.makesFilters.map((make) => ({
+    const selectOptions = makesStore.makesFilters.map((make) => ({
       value: make.name,
       label: make.name,
     }));
@@ -51,10 +58,6 @@ export const ModelForm = observer(
     ) => {
       const { value, name } = e.target;
       setFormState((oldState) => ({ ...oldState, [name]: value }));
-    };
-
-    const clearForm = () => {
-      setFormState(initalState);
     };
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -74,6 +77,14 @@ export const ModelForm = observer(
 
       navigate('/models');
     };
+
+    if (makesStore.makesFilters.length === 0) {
+      return (
+        <h1 className='veichle-form--empty'>
+          No makes avilable, please add some
+        </h1>
+      );
+    }
     return (
       <div className='veichle-form__container'>
         <h1 className='veichle-form__title'>

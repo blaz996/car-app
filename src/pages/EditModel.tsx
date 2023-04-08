@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useRootStore } from '../common/hooks/useRootStore';
@@ -7,13 +7,11 @@ import { Spinner } from '../components/Elements/Spinner';
 import { observer } from 'mobx-react';
 
 import { ModelForm } from '../components/VeichleModel/ModelForm';
-import { VeichleModelI } from '../stores/ModelsStore';
+import { VeichleModelI } from '../stores/modelsStore';
 
 export const EditModel = observer(() => {
   const { modelId } = useParams();
   const { modelsStore, makesStore } = useRootStore();
-
-  useEffect(() => {});
 
   const editModelSubmit = (editedModel: Omit<VeichleModelI, 'id'>) => {
     const updatedModel: any = {};
@@ -26,7 +24,7 @@ export const EditModel = observer(() => {
     modelsStore.editModel(modelId as string, updatedModel);
   };
 
-  if (modelsStore.modelStatus === 'loading' || !modelsStore.currModelMakeName) {
+  if (modelsStore.modelStatus === 'loading') {
     return <Spinner />;
   }
   if (modelsStore.modelStatus === 'error') {

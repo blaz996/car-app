@@ -1,9 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { RootStore } from './RootStore';
+import { RootStore } from './rootStore';
 
 import { Sort } from '../common/utils/sort';
-import { MakesApiService } from './services/ApiServices';
+import { MakesApiService } from './services/apiServices';
 import { Filter } from '../common/utils/filter';
+import { FiltersService } from './services/filtersService';
+import { PaginationService } from './services/paginationService';
 
 export type VeichleMakeI = {
   name: string;
@@ -18,29 +20,35 @@ export class MakesStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
+  //sortValue: Sort = new Sort('name', true, 'Name(Ascending)');
+
   makes: VeichleMakeI[] = [];
   makesStatus: string = 'idle';
-  make: VeichleMakeI = {} as VeichleMakeI;
+  make: VeichleMakeI =
+    JSON.parse(localStorage.getItem('currMake') || '{}') ||
+    ({} as VeichleMakeI);
   makeStatus: string = 'idle';
   isDeleting: boolean = false;
-  filters: Filter[] = [];
-  sortValue: Sort = new Sort('name', true, 'Name(Ascending)');
-  currentPage: number = 1;
-  totalRecords: number = 1;
 
+  makesFilters: VeichleMakeI[] = [];
+
+  filtersService: FiltersService = new FiltersService(
+    new Sort('name', true, 'Name(Ascending)')
+  );
+  paginationService: PaginationService = new PaginationService();
   apiService: MakesApiService = new MakesApiService();
 
   async fetchMakes(rpp: number = 10) {
     this.makesStatus = 'loading';
     try {
       const { data } = await this.apiService.getMakes(
-        this.applyFilters(),
-        this.sortValue.applySort(),
-        this.currentPage,
+        this.filtersService.applyFilters(),
+        this.filtersService.applySort(),
+        this.paginationService.currentPage,
         rpp
       );
       runInAction(() => {
-        this.totalRecords = data.totalRecords;
+        this.paginationService.totalRecords = data.totalRecords;
         this.makes = data.item;
         this.makesStatus = 'success';
       });
@@ -54,6 +62,7 @@ export class MakesStore {
     try {
       const { data } = await this.apiService.getMake(id);
       runInAction(() => {
+        window.localStorage.setItem('currMake', JSON.stringify(data));
         this.make = data;
         this.makeStatus = 'success';
       });
@@ -65,7 +74,7 @@ export class MakesStore {
   async fetchMakeByName(name: string) {
     const { data } = await this.apiService.getMakes(
       `&searchQuery=WHERE "name" = '${name}'`,
-      this.sortValue.applySort()
+      this.filtersService.applySort()
     );
 
     return data.item[0];
@@ -112,7 +121,7 @@ export class MakesStore {
       runInAction(() => {
         this.makes = this.makes.filter((make) => make.id !== id);
         this.isDeleting = false;
-        if (this.pageEmpty(this.makes)) {
+        if (this.paginationService.pageEmpty(this.makes)) {
           this.handleEmptyPage();
         }
       });
@@ -121,97 +130,26 @@ export class MakesStore {
     }
   }
 
-  handleEmptyPage() {
-    if (this.currentPage > 1) {
-      this.currentPage -= 1;
-    }
-    this.fetchMakes();
-  }
-
-  toggleFilter(currFilter: Filter) {
-    if (
-      this.filters.find((filter) => filter.property === currFilter.property)
-    ) {
-      this.removeFilter(currFilter.property);
-    }
-    this.addFilter(currFilter);
-
-    this.currentPage = 1;
-    this.fetchMakes();
-  }
-
-  addFilter(currFilter: Filter) {
-    this.currentPage = 1;
-    this.filters = [...this.filters, currFilter];
-  }
-
-  removeFilter(property: string, refetch: boolean = false) {
-    this.currentPage = 1;
-    this.filters = this.filters.filter(
-      (filter) => filter.property !== property
+  async setMakesFilters() {
+    const { data } = await this.apiService.getMakes(
+      this.filtersService.applyFilters(),
+      this.filtersService.applySort(),
+      1,
+      100
     );
+    runInAction(
+      () =>
+        (this.makesFilters = data.item.sort(
+          (a: VeichleMakeI, b: VeichleMakeI) =>
+            a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+        ))
+    );
+  }
 
-    if (refetch) {
-      this.currentPage = 1;
-      this.fetchMakes();
+  handleEmptyPage() {
+    if (this.paginationService.currentPage > 1) {
+      this.paginationService.currentPage -= 1;
     }
-  }
-
-  applyFilters() {
-    if (this.filters.length === 0) return '';
-    let filterString = '&searchQuery=';
-    this.filters.forEach((filter, i) => {
-      if (i === 0) {
-        filterString += `WHERE ${filter.applyFilter()}`;
-      } else {
-        filterString += ` AND ${filter.applyFilter()}`;
-      }
-    });
-
-    return filterString;
-  }
-
-  addSortValue(sortV: Sort) {
-    this.currentPage -= 1;
-    this.sortValue = sortV;
     this.fetchMakes();
-  }
-
-  clearFilters() {
-    this.filters = [];
-  }
-
-  nextPageExists() {
-    return this.currentPage + 1 > Math.ceil(this.totalRecords / 10)
-      ? false
-      : true;
-  }
-
-  previousPageExists() {
-    return this.currentPage - 1 === 0 ? false : true;
-  }
-
-  nextPage() {
-    if (this.nextPageExists()) {
-      this.currentPage += 1;
-      this.fetchMakes();
-    } else return;
-  }
-
-  previousPage() {
-    if (this.previousPageExists()) {
-      this.currentPage -= 1;
-      this.fetchMakes();
-    } else {
-      return;
-    }
-  }
-
-  resetCurrentPage() {
-    this.currentPage = 1;
-  }
-
-  pageEmpty(records: any[]) {
-    return records.length === 0 ? true : false;
   }
 }

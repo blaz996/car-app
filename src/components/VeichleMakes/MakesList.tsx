@@ -13,11 +13,19 @@ import { Pagination } from '../Elements/Pagination';
 
 export const MakeList = observer(() => {
   const { makesStore } = useRootStore();
+  const { filtersService, paginationService } = makesStore;
 
   useEffect(() => {
     makesStore.fetchMakes();
-  }, []);
+  }, [paginationService.currentPage]);
 
+  useEffect(() => {
+    if (paginationService.currentPage === 1) {
+      makesStore.fetchMakes();
+    } else {
+      paginationService.resetCurrentPage();
+    }
+  }, [filtersService.filters, filtersService.sortValue]);
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     let sortValue;
     if (e.target.value === 'Name (Ascending)') {
@@ -25,7 +33,7 @@ export const MakeList = observer(() => {
     } else {
       sortValue = new Sort('name', false, 'Name (Descending)');
     }
-    makesStore.addSortValue(sortValue);
+    filtersService.addSortValue(sortValue);
   };
 
   if (makesStore.makesStatus === 'loading') {
@@ -45,15 +53,15 @@ export const MakeList = observer(() => {
               { label: 'Name (Ascending)' },
               { label: 'Name (Descending)' },
             ]}
-            defaultValue={makesStore.sortValue.label}
+            defaultValue={filtersService.sortValue.label}
             onChange={handleSortChange}
           />
 
           <div className='list__active-filters'>
-            {makesStore.filters.map((filter) => (
+            {filtersService.filters.map((filter) => (
               <ActiveFilter
                 filter={filter}
-                handleRemove={makesStore.removeFilter}
+                handleRemove={filtersService.removeFilter}
               />
             ))}
           </div>
@@ -71,9 +79,9 @@ export const MakeList = observer(() => {
       <div className='makes-list__pagination'>
         {makesStore.makes.length !== 0 && (
           <Pagination
-            currPage={makesStore.currentPage}
-            nextPage={makesStore.nextPage}
-            previousPage={makesStore.previousPage}
+            currPage={paginationService.currentPage}
+            nextPage={paginationService.nextPage}
+            previousPage={paginationService.previousPage}
           />
         )}
       </div>

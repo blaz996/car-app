@@ -1,6 +1,6 @@
 import React, { createContext } from 'react';
-import { ModelsStore } from './ModelsStore';
-import { MakesStore } from './MakesStore';
+import { ModelsStore } from './modelsStore';
+import { MakesStore } from './makesStore';
 
 export class RootStore {
   modelsStore: ModelsStore;

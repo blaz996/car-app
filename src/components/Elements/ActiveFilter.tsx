@@ -1,8 +1,6 @@
-import { Button } from './Button';
-
 import './ActiveFilter..scss';
 
-import { Filter, RangeFilter, ToggleFilter } from '../../common/utils/filter';
+import { Filter } from '../../common/utils/filter';
 
 type ActiveFilterProps = {
   filter: Filter;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useRootStore } from '../common/hooks/useRootStore';
-import { VeichleMakeI } from '../stores/MakesStore';
+import { VeichleMakeI } from '../stores/makesStore';
 import { MakeForm } from '../components/VeichleMakes/MakeForm';
 
 export const AddMake = () => {

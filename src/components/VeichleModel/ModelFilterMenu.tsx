@@ -3,6 +3,8 @@ import { observer } from 'mobx-react';
 
 import { ModelFilters } from './ModelFilters';
 import { useRootStore } from '../../common/hooks/useRootStore';
+import { Filter } from '../../common/utils/filter';
+import { useState } from 'react';
 
 import {
   MODELS_SORT_SELECT_OPTIONS,
@@ -22,16 +24,13 @@ type ModelFilterMenuProps = {
 export const ModelFilterMenu = observer(
   ({ shown, handleClose }: ModelFilterMenuProps) => {
     const { modelsStore } = useRootStore();
-
-    useEffect(() => {
-      handleClose();
-    }, [modelsStore.filters, modelsStore.sortValue]);
+    const { filtersService } = modelsStore;
 
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const sortValue = MODELS_SORT_VALUES.find(
         (sortV) => sortV.label === e.target.value
       );
-      modelsStore.addSortValue(
+      filtersService.addSortValue(
         new Sort(sortValue!.property, sortValue!.ascending, e.target.value)
       );
     };
@@ -44,7 +43,7 @@ export const ModelFilterMenu = observer(
           <Select
             label='Sort by:'
             options={MODELS_SORT_SELECT_OPTIONS}
-            defaultValue={modelsStore.sortValue.label}
+            defaultValue={filtersService.sortValue.label}
             onChange={handleSortChange}
           />
           <ModelFilters />

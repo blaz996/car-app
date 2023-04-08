@@ -1,17 +1,14 @@
-import { RootStore } from './RootStore';
+import { RootStore } from './rootStore';
 
 import { makeAutoObservable } from 'mobx';
 
-import { ModelsApiService } from './services/ApiServices';
-import { FilterMenuStore } from './FilterMenuStore';
+import { ModelsApiService } from './services/apiServices';
 
 import { Sort } from '../common/utils/sort';
 
 import { runInAction } from 'mobx';
-
-import { VeichleMakeI } from './MakesStore';
-import { Filter } from '../common/utils/filter';
-import { axios } from '../common/lib/axios';
+import { FiltersService } from './services/filtersService';
+import { PaginationService } from './services/paginationService';
 
 export type VeichleModelI = {
   name: string;
@@ -31,17 +28,16 @@ export class ModelsStore {
   }
   models: VeichleModelI[] = [];
   modelsStatus: string = 'idle';
-  model: VeichleModelI = {} as VeichleModelI;
-  currModelMakeName: string = '';
+  model: VeichleModelI =
+    JSON.parse(localStorage.getItem('currModel') || '{}') ||
+    ({} as VeichleModelI);
+  currModelMakeName: string =
+    JSON.parse(localStorage.getItem('currModelMakeName') || '{}') || '';
   modelStatus: string = 'idle';
   isDeleting: boolean = false;
-  makesFilters: VeichleMakeI[] = [];
-  filters: Filter[] = [];
-  sortValue: Sort = new Sort('year', false, 'Year (Latest)');
-  currentPage: number = 1;
-  totalRecords: number = 1;
 
-  filterMenuStore = new FilterMenuStore();
+  filtersService = new FiltersService(new Sort('year', false, 'Year (Latest)'));
+  paginationService = new PaginationService();
   apiService: ModelsApiService = new ModelsApiService();
 
   async fetchModels(rpp: number = 10) {
@@ -49,13 +45,13 @@ export class ModelsStore {
 
     try {
       const { data } = await this.apiService.getModels(
-        this.applyFilters(),
-        this.sortValue.applySort(),
-        this.currentPage,
+        this.filtersService.applyFilters(),
+        this.filtersService.applySort(),
+        this.paginationService.currentPage,
         rpp
       );
       runInAction(() => {
-        this.totalRecords = data.totalRecords;
+        this.paginationService.totalRecords = data.totalRecords;
         this.models = data.item;
         this.modelsStatus = 'success';
       });
@@ -72,6 +68,11 @@ export class ModelsStore {
 
       runInAction(() => {
         this.model = data;
+        window.localStorage.setItem('currModel', JSON.stringify(data));
+        window.localStorage.setItem(
+          'currModelMakeName',
+          JSON.stringify(makeName)
+        );
         this.currModelMakeName = makeName;
         this.modelStatus = 'success';
       });
@@ -111,7 +112,7 @@ export class ModelsStore {
       runInAction(() => {
         this.models = this.models.filter((model) => model.id !== id);
         this.isDeleting = false;
-        if (this.pageEmpty(this.models)) {
+        if (this.paginationService.pageEmpty(this.models)) {
           this.handleEmptyPage();
         }
       });
@@ -121,7 +122,7 @@ export class ModelsStore {
   async deleteAllModelsForMake(makeId: string) {
     const { data } = await this.apiService.getModels(
       `&searchQuery=WHERE "makeId" = '${makeId}'`,
-      this.sortValue.applySort(),
+      this.filtersService.applySort(),
       1,
       50
     );
@@ -133,108 +134,10 @@ export class ModelsStore {
     );
   }
 
-  async setMakesFilters() {
-    const { data } = await axios.get(`/resources/VeichleMake/?rpp=100`);
-    runInAction(
-      () =>
-        (this.makesFilters = data.item.sort(
-          (a: VeichleMakeI, b: VeichleMakeI) =>
-            a.name > b.name ? 1 : b.name > a.name ? -1 : 0
-        ))
-    );
-  }
-
   handleEmptyPage() {
-    if (this.currentPage > 1) {
-      this.currentPage -= 1;
+    if (this.paginationService.currentPage > 1) {
+      this.paginationService.currentPage -= 1;
     }
     this.fetchModels();
-  }
-
-  toggleFilter(currFilter: Filter) {
-    if (
-      this.filters.find((filter) => filter.property === currFilter.property)
-    ) {
-      this.removeFilter(currFilter.property);
-    }
-    this.addFilter(currFilter);
-    this.filterMenuStore.close();
-    this.currentPage = 1;
-    this.fetchModels();
-  }
-
-  addFilter(currFilter: Filter) {
-    this.filters = [...this.filters, currFilter];
-  }
-
-  removeFilter(property: string, refetch: boolean = false) {
-    this.currentPage = 1;
-    this.filters = this.filters.filter(
-      (filter) => filter.property !== property
-    );
-
-    if (refetch) {
-      this.currentPage = 1;
-      this.fetchModels();
-    }
-  }
-
-  applyFilters() {
-    if (this.filters.length === 0) return '';
-    let filterString = '&searchQuery=';
-    this.filters.forEach((filter, i) => {
-      if (i === 0) {
-        filterString += `WHERE ${filter.applyFilter()}`;
-      } else {
-        filterString += ` AND ${filter.applyFilter()}`;
-      }
-    });
-
-    return filterString;
-  }
-
-  addSortValue(sortV: Sort) {
-    this.sortValue = sortV;
-    this.currentPage = 1;
-    this.fetchModels();
-    this.filterMenuStore.close();
-  }
-
-  clearFilters() {
-    this.filters = [];
-  }
-
-  nextPageExists() {
-    return this.currentPage + 1 > Math.ceil(this.totalRecords / 10)
-      ? false
-      : true;
-  }
-
-  previousPageExists() {
-    return this.currentPage - 1 === 0 ? false : true;
-  }
-
-  nextPage() {
-    if (this.nextPageExists()) {
-      this.currentPage += 1;
-      this.fetchModels();
-    } else return;
-  }
-
-  previousPage() {
-    if (this.previousPageExists()) {
-      this.currentPage -= 1;
-      this.fetchModels();
-    } else {
-      return;
-    }
-  }
-
-  resetCurrentPage() {
-    this.currentPage = 1;
-  }
-
-  pageEmpty(records: any[]) {
-    return records.length === 0 ? true : false;
   }
 }

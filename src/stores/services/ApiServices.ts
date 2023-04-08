@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { axios } from '../../common/lib/axios';
-import { VeichleMakeI } from '../MakesStore';
-import { VeichleModelI } from '../ModelsStore';
+import { VeichleMakeI } from '../makesStore';
+import { VeichleModelI } from '../modelsStore';
 
 export class ModelsApiService {
   getModels(
@@ -10,6 +10,9 @@ export class ModelsApiService {
     currPage: number = 1,
     rpp: number = 10
   ) {
+    console.log(
+      `/resources/VeichleModel/?sort=${sort}${filters}&page=${currPage}&rpp=${rpp}`
+    );
     return axios.get(
       `/resources/VeichleModel/?sort=${sort}${filters}&page=${currPage}&rpp=${rpp}`
     );

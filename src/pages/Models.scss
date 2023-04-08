@@ -82,4 +82,28 @@
       width: rem(150);
     }
   }
+
+  &__content {
+    padding-bottom: rem(40);
+
+    width: 100%;
+    display: grid;
+    gap: rem(80);
+    grid-template-columns: rem(300) 1fr;
+
+    @include breakpoint-down(medium) {
+      grid-template-columns: rem(270) 1fr;
+
+      @include breakpoint-down(smallish) {
+        grid-template-columns: 1fr;
+        padding-inline: rem(20);
+      }
+    }
+  }
+
+  .model-filters {
+    @include breakpoint-down(smallish) {
+      display: none;
+    }
+  }
 }

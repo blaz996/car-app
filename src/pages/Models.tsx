@@ -11,14 +11,16 @@ import { ModelsList } from '../components/VeichleModel/ModelsList';
 import { SearchFilter } from '../common/utils/filter';
 import { useRootStore } from '../common/hooks/useRootStore';
 import { Sort } from '../common/utils/sort';
+import { ModelFilters } from '../components/VeichleModel/ModelFilters';
 
 import './Models.scss';
 
 export const Models = observer(() => {
-  const { modelsStore } = useRootStore();
+  const { modelsStore, makesStore } = useRootStore();
+  const { filtersService } = modelsStore;
 
   useEffect(() => {
-    modelsStore.setMakesFilters();
+    makesStore.setMakesFilters();
   }, []);
 
   const handleSearchBarSubmit = (
@@ -27,7 +29,7 @@ export const Models = observer(() => {
   ) => {
     e.preventDefault();
     if (searchValue === '') {
-      modelsStore.removeFilter('name', true);
+      filtersService.removeFilter('name', true);
       return;
     }
     const filter = new SearchFilter({
@@ -35,14 +37,14 @@ export const Models = observer(() => {
       property: 'name',
       value: searchValue,
     });
-    modelsStore.toggleFilter(filter);
+    filtersService.toggleFilter(filter);
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const sortValue = MODELS_SORT_VALUES.find(
       (sortV) => sortV.label === e.target.value
     );
-    modelsStore.addSortValue(
+    filtersService.addSortValue(
       new Sort(sortValue!.property, sortValue!.ascending, e.target.value)
     );
   };
@@ -56,10 +58,12 @@ export const Models = observer(() => {
           selectOptions={MODELS_SORT_SELECT_OPTIONS}
           linkRoute='addModel'
           linkText='New Model'
-          selectDefaultValue={modelsStore.sortValue.label}
+          selectDefaultValue={filtersService.sortValue.label}
         />
-
-        <ModelsList />
+        <div className='models__content'>
+          <ModelFilters />
+          <ModelsList />
+        </div>
       </div>
     </>
   );

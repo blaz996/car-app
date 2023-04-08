@@ -1,7 +1,7 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
 
 import { useRootStore } from '../common/hooks/useRootStore';
-import { VeichleModelI } from '../stores/ModelsStore';
+import { VeichleModelI } from '../stores/modelsStore';
 
 import { ModelForm } from '../components/VeichleModel/ModelForm';
 
